@@ -33,7 +33,7 @@ export default function HomePage() {
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [themeMode, setThemeMode] = useState<"auto" | "light" | "dark">("auto");
   const [isLightMode, setIsLightMode] = useState<boolean>(true);
-  const [showIntro, setShowIntro] = useState<boolean>(false);
+  const [showIntro, setShowIntro] = useState<boolean>(true);
 
   // Favorites state
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -257,10 +257,11 @@ export default function HomePage() {
 
 
 
-      {/* Cinematic Opening Animation (only played when user clicks mascot/play) */}
+      {/* Cinematic Opening Animation (played on page load / reload, stays 2-3s) */}
       {showIntro && (
         <OpeningAnimation
           forceShow={showIntro}
+          currentLanguage={currentLanguage}
           onComplete={() => setShowIntro(false)}
         />
       )}

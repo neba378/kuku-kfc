@@ -3,20 +3,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, X } from "lucide-react";
-import { KukuCharacter } from "./KukuCharacter";
+import { Sparkles, X, Flame } from "lucide-react";
+import { Language } from "@/data/menu";
+import { soundFx } from "@/utils/soundEffects";
 
 interface OpeningAnimationProps {
   onComplete: () => void;
   forceShow?: boolean;
+  currentLanguage?: Language;
 }
 
 export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({
   onComplete,
-  forceShow = false,
+  forceShow = true,
+  currentLanguage = "en",
 }) => {
-  const [step, setStep] = useState<number>(0);
   const [shouldRender, setShouldRender] = useState<boolean>(forceShow);
+  const [isClosing, setIsClosing] = useState<boolean>(false);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
@@ -27,190 +30,165 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({
     }
 
     setShouldRender(true);
-    setStep(0);
+    setIsClosing(false);
 
-    // Sequence timing
-    // Step 0: Kuku walks in with cloche (0s)
-    // Step 1: Kuku stops, tilts shades (0.8s)
-    // Step 2: Cloche lifts, steam & logo reveal (1.6s)
-    // Step 3: Fade out to menu (3.0s)
-    const t1 = setTimeout(() => setStep(1), 800);
-    const t2 = setTimeout(() => setStep(2), 1600);
-    const t3 = setTimeout(() => {
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("kuku_intro_seen", "true");
-      }
-      setStep(3);
+    // Play subtle friendly sound
+    soundFx.playCluck();
+
+    // Stays on screen for ~2.6s, then fades out smoothly
+    const timer = setTimeout(() => {
+      setIsClosing(true);
       setTimeout(() => {
         setShouldRender(false);
         onCompleteRef.current();
-      }, 400);
-    }, 3000);
+      }, 450);
+    }, 2600);
 
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-    };
+    return () => clearTimeout(timer);
   }, [forceShow]);
 
   const handleSkip = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("kuku_intro_seen", "true");
-    }
-    setShouldRender(false);
-    onCompleteRef.current();
+    setIsClosing(true);
+    setTimeout(() => {
+      setShouldRender(false);
+      onCompleteRef.current();
+    }, 200);
   };
 
   if (!shouldRender || !forceShow) return null;
 
+  const welcomeHeadline =
+    currentLanguage === "am"
+      ? "እንኳን ወደ ኩኩ ፍራይድ ቺከን በደህና መጡ!"
+      : currentLanguage === "om"
+      ? "Baga gara KUKU Fried Chicken nagaan dhuftan!"
+      : "Welcome to KUKU Fried Chicken!";
+
+  const welcomeSub =
+    currentLanguage === "am"
+      ? "ትኩስ ክሪስፒ ዶሮ፣ ሻዋርማ እና ልዩ ፒዛ"
+      : currentLanguage === "om"
+      ? "Kurkuraa · Shawaarmaa · Pitsaa Haaraa"
+      : "Crispy · Flame-Grilled · Authentic Taste";
+
   return (
     <AnimatePresence>
-      {step < 3 && (
+      {!isClosing && (
         <motion.div
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.04 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0A0A0E] text-white overflow-hidden select-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 1.03 }}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0c0a09] text-white overflow-hidden select-none"
         >
-          {/* Background Radiant Ember Glow */}
-          <div className="absolute inset-0 bg-radial-gradient from-amber-600/20 via-orange-950/10 to-transparent pointer-events-none" />
-          <div className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-amber-500/10 to-orange-600/15 blur-3xl pointer-events-none" />
+          {/* Shining Background Layer matching menu cover */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/banner-shining-bg.jpg"
+              alt="KUKU Flame Glow"
+              fill
+              className="object-cover object-center opacity-70"
+              priority
+            />
+          </div>
 
-          {/* Floating Steam/Sparkle Particles */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {[...Array(12)].map((_, i) => (
+          {/* Ambient Warm Golden Flare & Vignette */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(245,158,11,0.22),transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.4),transparent_40%,rgba(0,0,0,0.8))] pointer-events-none" />
+
+          {/* Steam particles rising from the roasted platter */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
+            {[...Array(8)].map((_, i) => (
               <motion.div
                 key={i}
                 initial={{
-                  x: Math.random() * 400 - 200 + (typeof window !== "undefined" ? window.innerWidth / 2 : 200),
-                  y: (typeof window !== "undefined" ? window.innerHeight / 2 : 400) + 100,
+                  x: 35 + (i % 3) * 15,
+                  y: 40,
                   opacity: 0,
-                  scale: 0.6,
+                  scale: 0.5,
                 }}
-                animate={
-                  step >= 2
-                    ? {
-                        y: (typeof window !== "undefined" ? window.innerHeight / 2 : 400) - 220 - Math.random() * 120,
-                        opacity: [0, 0.9, 0],
-                        scale: [0.6, 1.4, 0.2],
-                      }
-                    : {}
-                }
+                animate={{
+                  y: -120 - i * 18,
+                  x: 30 + (i % 3) * 15 + Math.sin(i) * 20,
+                  opacity: [0, 0.7, 0],
+                  scale: [0.5, 1.3, 2.0],
+                }}
                 transition={{
-                  duration: 1.6 + Math.random(),
-                  delay: Math.random() * 0.4,
+                  duration: 1.8,
+                  repeat: Infinity,
+                  delay: i * 0.22,
                   ease: "easeOut",
                 }}
-                className="absolute w-2 h-2 rounded-full bg-amber-400/60 blur-[1px]"
+                className="absolute top-[35%] left-[54%] w-3 h-3 rounded-full bg-white/25 blur-sm"
               />
             ))}
           </div>
 
-          {/* Center Mascot & Cloche Presentation */}
-          <div className="relative flex flex-col items-center z-10">
-            {/* Mascot Container */}
+          {/* Central Character & Intro Stage */}
+          <div className="relative z-20 flex flex-col items-center max-w-sm sm:max-w-md px-4 text-center">
+            {/* White Rooster Mascot Cutout from Restaurant Mural */}
             <motion.div
-              initial={{ x: -160, opacity: 0, scale: 0.85 }}
-              animate={
-                step === 0
-                  ? { x: 0, opacity: 1, scale: 1 }
-                  : step === 1
-                  ? { x: 0, opacity: 1, scale: 1.05 }
-                  : { x: 0, opacity: 1, scale: 0.95, y: -20 }
-              }
+              initial={{ scale: 0.8, y: 25, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
               transition={{
-                duration: 0.8,
-                ease: [0.22, 1, 0.36, 1],
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                duration: 0.6,
               }}
-              className="relative flex items-center justify-center"
+              className="relative w-56 h-56 sm:w-68 sm:h-68 flex items-center justify-center filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
             >
-              <KukuCharacter
-                size={140}
-                animate={step < 2}
-                mood={step >= 1 ? "cool" : "happy"}
-              />
-
-              {/* Serving Cloche / Platter */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="relative -ml-4 mt-8 flex flex-col items-center"
+                animate={{ y: [0, -6, 0] }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="relative w-full h-full"
               >
-                {/* Silver Tray Base */}
-                <div className="w-24 h-3 rounded-full bg-gradient-to-r from-neutral-300 via-neutral-100 to-neutral-400 shadow-md border-b border-neutral-500" />
-
-                {/* Cloche Dome Lid */}
-                <motion.div
-                  initial={{ y: 0, x: 0, rotate: 0 }}
-                  animate={
-                    step >= 2
-                      ? {
-                          y: -75,
-                          x: 25,
-                          rotate: 35,
-                          opacity: [1, 0.8, 0],
-                        }
-                      : { y: 0, x: 0, rotate: 0 }
-                  }
-                  transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="absolute bottom-3 left-1/2 -translate-x-1/2 w-16 h-12 rounded-t-full bg-gradient-to-t from-neutral-400 via-neutral-200 to-neutral-100 border border-neutral-300 shadow-lg flex items-center justify-center"
-                >
-                  <div className="w-2.5 h-2.5 rounded-full bg-neutral-300 -top-2 absolute shadow" />
-                </motion.div>
+                <Image
+                  src="/images/kuku-mascot-cool.png"
+                  alt="KUKU Cool Rooster Mascot"
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </motion.div>
             </motion.div>
 
-            {/* Revealed Brand & Welcome Card */}
+            {/* Speech Bubble / Intro Message from Rooster */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.75, y: 30 }}
-              animate={
-                step >= 2
-                  ? { opacity: 1, scale: 1, y: 0 }
-                  : { opacity: 0, scale: 0.75, y: 30 }
-              }
-              transition={{
-                duration: 0.6,
-                type: "spring",
-                stiffness: 140,
-                damping: 12,
-              }}
-              className="flex flex-col items-center gap-2 mt-4"
+              initial={{ opacity: 0, y: 15, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.25, duration: 0.4 }}
+              className="relative mt-2 bg-gradient-to-b from-[#FFFDF5] to-[#FFF4D6] text-stone-900 px-5 py-3 rounded-2xl shadow-2xl border-2 border-amber-400 max-w-xs sm:max-w-sm"
             >
-              {/* Logo Emblem */}
-              <div className="relative w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-[#FFB800] via-[#FF4500] to-[#E52020] shadow-xl shadow-orange-600/40">
-                <div className="w-full h-full rounded-full bg-[#FFD200] flex items-center justify-center overflow-hidden">
-                  <Image
-                    src="/images/kuku-logo.png"
-                    alt="KUKU"
-                    width={72}
-                    height={72}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </div>
+              {/* Pointer triangle toward rooster beak */}
+              <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#FFFDF5] border-t-2 border-l-2 border-amber-400 rotate-45" />
 
-              <div className="mt-2 text-center">
-                <span className="text-[11px] font-extrabold tracking-widest text-orange-400 uppercase bg-orange-500/10 px-3 py-1 rounded-full border border-orange-500/20">
-                  Welcome to KUKU
-                </span>
-                <h1 className="text-3xl font-black tracking-tight text-white mt-1">
+              <div className="relative z-10 flex flex-col items-center">
+                <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-700 bg-amber-500/15 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                  <Flame className="w-3 h-3 text-red-600 fill-red-600" />
                   KUKU Fried Chicken
-                </h1>
-                <p className="text-xs text-neutral-400 mt-1 flex items-center justify-center gap-1.5">
-                  <Flame className="w-3.5 h-3.5 text-amber-400" />
-                  Crispy · Flame-Grilled · Fresh Delights
+                </span>
+
+                <h3 className="text-sm sm:text-base font-black text-stone-900 mt-1 leading-snug">
+                  {welcomeHeadline}
+                </h3>
+                <p className="text-[11px] sm:text-xs font-bold text-stone-600 mt-0.5">
+                  {welcomeSub}
                 </p>
               </div>
             </motion.div>
 
-            {/* Quick Progress Bar */}
-            <div className="w-36 h-1 rounded-full bg-neutral-800 overflow-hidden mt-6">
+            {/* 2.6-second Loading / Intro Progress Bar */}
+            <div className="w-40 sm:w-48 h-1.5 rounded-full bg-white/15 overflow-hidden mt-6 backdrop-blur-sm border border-white/10">
               <motion.div
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
-                transition={{ duration: 3.0, ease: "linear" }}
-                className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"
+                transition={{ duration: 2.5, ease: "linear" }}
+                className="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-300 rounded-full"
               />
             </div>
           </div>
@@ -218,8 +196,8 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({
           {/* Skip Button */}
           <button
             onClick={handleSkip}
-            className="absolute top-5 right-5 z-20 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-xs font-semibold text-neutral-300 hover:text-white transition-all flex items-center gap-1 border border-white/10 cursor-pointer"
-            aria-label="Skip Introduction"
+            className="absolute top-5 right-5 z-30 px-3.5 py-1.5 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md text-xs font-bold text-neutral-300 hover:text-white transition-all flex items-center gap-1 border border-white/15 cursor-pointer"
+            aria-label="Skip Intro"
           >
             <span>Skip</span>
             <X className="w-3.5 h-3.5" />
