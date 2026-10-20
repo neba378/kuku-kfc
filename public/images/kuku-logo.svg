@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <radialGradient id="discGrad" cx="45%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FFE033"/>
+      <stop offset="70%" stop-color="#FFC700"/>
+      <stop offset="100%" stop-color="#E5A700"/>
+    </radialGradient>
+    <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Yellow Disc -->
+  <circle cx="200" cy="200" r="185" fill="url(#discGrad)" stroke="#CC9000" stroke-width="4" filter="url(#badgeShadow)"/>
+  <circle cx="200" cy="200" r="176" fill="none" stroke="#FFF5A0" stroke-width="2.5" opacity="0.6"/>
+
+  <!-- Stylized Rooster Graphic -->
+  <g transform="translate(10, -5)">
+    <!-- Rooster Comb (Red) -->
+    <path d="M 230 75 C 235 55 255 50 268 62 C 280 50 300 58 300 75 C 315 70 330 85 320 102 C 328 115 322 132 305 138 C 285 145 270 140 260 130 Z" 
+          fill="#D91616" stroke="#9A0808" stroke-width="3"/>
+    
+    <!-- Feather Tufts / Mane Back -->
+    <path d="M 270 120 C 310 130 335 170 325 210 C 318 240 290 270 260 280 C 275 255 275 220 255 195 C 270 185 275 160 260 145 Z" 
+          fill="#D91616" opacity="0.95"/>
+
+    <!-- Chicken Face & Body (Yellow Contour with Dynamic Lines) -->
+    <!-- Head Outline -->
+    <path d="M 125 195 C 130 145 165 105 215 95 C 245 88 270 100 275 125 C 280 155 260 185 240 205 C 210 235 170 248 135 240 C 130 225 125 210 125 195 Z" 
+          fill="#FFCC00" stroke="#D91616" stroke-width="5" stroke-linejoin="round"/>
+
+    <!-- Sharp Beak -->
+    <path d="M 215 155 L 248 172 L 218 185 Z" fill="#D91616"/>
+    <path d="M 220 162 L 244 172 L 222 180 Z" fill="#FFC700"/>
+
+    <!-- Intense Eye -->
+    <circle cx="205" cy="148" r="9" fill="#D91616"/>
+    <circle cx="203" cy="146" r="4.5" fill="#FFFFFF"/>
+    <circle cx="202" cy="145" r="2" fill="#000000"/>
+
+    <!-- Wattle (Hanging Red Flesh) -->
+    <path d="M 215 188 C 228 190 235 208 228 222 C 220 235 205 235 198 220 C 192 208 202 190 215 188 Z" 
+          fill="#D91616" stroke="#9A0808" stroke-width="2"/>
+    <path d="M 228 200 C 240 205 242 225 232 235 C 225 242 215 238 212 228 Z" 
+          fill="#D91616" opacity="0.85"/>
+
+    <!-- Dynamic Feather Strokes / Whiskers -->
+    <path d="M 145 170 C 170 175 190 165 200 155" fill="none" stroke="#D91616" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M 148 195 C 175 198 195 190 205 180" fill="none" stroke="#D91616" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 155 220 C 180 220 200 210 215 198" fill="none" stroke="#D91616" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 180 120 C 200 122 218 112 225 105" fill="none" stroke="#D91616" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Swoop Banner Background for Brand Script -->
+  <path d="M 65 285 C 130 260 270 255 345 285 C 330 325 280 345 200 345 C 120 345 80 325 65 285 Z" fill="#D91616" opacity="0.12"/>
+
+  <!-- Brand Typography -->
+  <g id="brand-text">
+    <!-- "Kuku" Bold Brush Script -->
+    <text x="145" y="305" font-family="'Brush Script MT', 'Segoe Script', 'Caveat', cursive, sans-serif" 
+          font-size="64" font-weight="900" font-style="italic" fill="#D91616" text-anchor="middle" letter-spacing="1">
+      Kuku
+    </text>
+    <!-- "Fried Chicken" Subtitle -->
+    <text x="260" y="295" font-family="'Impact', 'Arial Black', sans-serif" 
+          font-size="20" font-weight="900" font-style="italic" fill="#B30E0E" text-anchor="middle" letter-spacing="1">
+      FRIED CHICKEN
+    </text>
+    <!-- Underline Swoosh -->
+    <path d="M 75 315 C 130 325 260 325 330 305" fill="none" stroke="#D91616" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>
