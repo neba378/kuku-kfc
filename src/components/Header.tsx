@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <div className="w-full h-full rounded-full bg-[#FFD200] flex items-center justify-center overflow-hidden">
               <Image
-                src="/images/kuku-logo.svg"
+                src="/images/kuku-logo.png"
                 alt="KUKU Fried Chicken Logo"
                 width={44}
                 height={44}

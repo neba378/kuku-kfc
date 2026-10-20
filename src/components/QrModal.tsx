@@ -75,7 +75,7 @@ export const QrModal: React.FC<QrModalProps> = ({
         <div className="w-16 h-16 rounded-full overflow-hidden p-1 bg-gradient-to-tr from-[#FFB800] via-[#FF4500] to-[#E52020] mb-3">
           <div className="w-full h-full rounded-full bg-[#FFD200] flex items-center justify-center">
             <Image
-              src="/images/kuku-logo.svg"
+              src="/images/kuku-logo.png"
               alt="KUKU Logo"
               width={56}
               height={56}

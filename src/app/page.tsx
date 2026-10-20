@@ -468,7 +468,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-2">
           <div className="w-9 h-9 rounded-full overflow-hidden p-0.5 bg-gradient-to-tr from-[var(--brand-gold)] to-[var(--brand-primary)]">
             <Image
-              src="/images/kuku-logo.svg"
+              src="/images/kuku-logo.png"
               alt="KUKU"
               width={36}
               height={36}

@@ -181,7 +181,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({
               <div className="relative w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-[#FFB800] via-[#FF4500] to-[#E52020] shadow-xl shadow-orange-600/40">
                 <div className="w-full h-full rounded-full bg-[#FFD200] flex items-center justify-center overflow-hidden">
                   <Image
-                    src="/images/kuku-logo.svg"
+                    src="/images/kuku-logo.png"
                     alt="KUKU"
                     width={72}
                     height={72}

@@ -28,7 +28,8 @@ export const metadata: Metadata = {
   description:
     "Official digital menu for KUKU Fried Chicken / KFC. Discover our signature Crispy Chicken, Roasted Chicken, flame-grilled wings, authentic shawarma and gourmet burgers.",
   icons: {
-    icon: "/images/kuku-logo.svg",
+    icon: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "KUKU Fried Chicken | Premium Digital Menu",
