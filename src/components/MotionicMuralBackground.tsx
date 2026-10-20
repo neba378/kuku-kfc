@@ -7,8 +7,19 @@ import { motion } from "framer-motion";
 export const MotionicMuralBackground: React.FC = () => {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+      {/* Subtle Restaurant Chalk & Texture Layer (Visible on Light & Dark) */}
+      <div className="absolute inset-0 opacity-[0.06] dark:opacity-[0.08] mix-blend-multiply dark:mix-blend-screen">
+        <Image
+          src="/images/banner-shining-bg.jpg"
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority={false}
+        />
+      </div>
+
       {/* Ambient Warm Gradient Wash */}
-      <div className="absolute inset-0 bg-gradient-to-b from-amber-500/[0.03] via-transparent to-orange-500/[0.04]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-amber-500/[0.06] via-transparent to-orange-500/[0.07]" />
 
       {/* Floating Mural 1: The Cool Rooster Mascot (Floating on top-right) */}
       <motion.div
@@ -22,7 +33,7 @@ export const MotionicMuralBackground: React.FC = () => {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute -top-12 -right-16 sm:-right-8 w-64 h-64 sm:w-96 sm:h-96 opacity-[0.09] dark:opacity-[0.14] mix-blend-multiply dark:mix-blend-screen"
+        className="absolute -top-8 -right-12 sm:-right-4 w-72 h-72 sm:w-[420px] sm:h-[420px] opacity-[0.22] sm:opacity-[0.26] dark:opacity-[0.15] mix-blend-multiply dark:mix-blend-screen"
       >
         <div className="relative w-full h-full rounded-full overflow-hidden mask-radial-faded">
           <Image
@@ -48,7 +59,7 @@ export const MotionicMuralBackground: React.FC = () => {
           ease: "easeInOut",
           delay: 2,
         }}
-        className="absolute top-1/3 -left-20 sm:-left-12 w-72 h-72 sm:w-[420px] sm:h-[420px] opacity-[0.08] dark:opacity-[0.13] mix-blend-multiply dark:mix-blend-screen"
+        className="absolute top-1/3 -left-16 sm:-left-8 w-80 h-80 sm:w-[460px] sm:h-[460px] opacity-[0.20] sm:opacity-[0.24] dark:opacity-[0.14] mix-blend-multiply dark:mix-blend-screen"
       >
         <div className="relative w-full h-full rounded-full overflow-hidden">
           <Image
@@ -74,7 +85,7 @@ export const MotionicMuralBackground: React.FC = () => {
           ease: "easeInOut",
           delay: 4,
         }}
-        className="absolute -bottom-16 -right-16 sm:right-10 w-80 h-80 sm:w-[440px] sm:h-[440px] opacity-[0.08] dark:opacity-[0.13] mix-blend-multiply dark:mix-blend-screen"
+        className="absolute -bottom-12 -right-12 sm:right-12 w-88 h-88 sm:w-[480px] sm:h-[480px] opacity-[0.19] sm:opacity-[0.23] dark:opacity-[0.14] mix-blend-multiply dark:mix-blend-screen"
       >
         <div className="relative w-full h-full rounded-full overflow-hidden">
           <Image
@@ -87,9 +98,9 @@ export const MotionicMuralBackground: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Soft warm radial glow blobs */}
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-orange-400/[0.04] blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-amber-400/[0.04] blur-3xl pointer-events-none" />
+      {/* Soft warm radiant highlights */}
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-orange-400/[0.08] blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-amber-400/[0.08] blur-3xl pointer-events-none" />
     </div>
   );
 };
