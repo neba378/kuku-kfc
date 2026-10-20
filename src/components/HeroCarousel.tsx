@@ -51,7 +51,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       ctaCategory: "shawarma",
       image: "/images/real/real-special-shawarma.jpg",
       imageAlt: "KUKU Special Double Chicken Shawarma",
-      bgGradient: "from-[#B83E1B] via-[#9B2F11] to-[#731F0A]",
+      bgGradient: "from-amber-600/35 via-orange-600/20 to-transparent",
     },
     {
       id: "slide-crispy",
@@ -67,7 +67,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       ctaCategory: "chicken",
       image: "/images/real/real-crispy-chicken.jpg",
       imageAlt: "KUKU Crispy Chicken",
-      bgGradient: "from-[#C44A18] via-[#8C280B] to-[#5A1705]",
+      bgGradient: "from-orange-600/35 via-red-600/20 to-transparent",
     },
     {
       id: "slide-pizza",
@@ -83,7 +83,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       ctaCategory: "pizza",
       image: "/images/real/real-chicken-pizza.jpg",
       imageAlt: "KUKU Special Cheesy Pizza",
-      bgGradient: "from-[#9E2A0E] via-[#751C08] to-[#450F03]",
+      bgGradient: "from-yellow-600/35 via-amber-600/20 to-transparent",
     },
   ];
 
@@ -151,13 +151,24 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Unified Banner Container like original aesthetic */}
+      {/* Unified Banner Container matching the authentic shining charcoal & glowing embers menu background */}
       <div
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative overflow-hidden rounded-3xl shadow-xl shadow-orange-950/15 text-white transition-all duration-700 min-h-[210px] sm:min-h-[260px] md:min-h-[285px] flex items-center cursor-grab active:cursor-grabbing"
+        className="relative overflow-hidden rounded-3xl shadow-2xl shadow-black/50 text-white transition-all duration-700 min-h-[210px] sm:min-h-[260px] md:min-h-[285px] flex items-center cursor-grab active:cursor-grabbing border border-amber-500/25 bg-[#0e0c0b]"
       >
-        {/* Animated Background Gradient Transition */}
+        {/* Authentic Shining Background Texture from KUKU Menu */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/banner-shining-bg.jpg"
+            alt="KUKU Flame & Grill Glow"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+
+        {/* Dynamic Subtle Slide Color Accent Glow */}
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.id}
@@ -165,12 +176,13 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient}`}
+            className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient} mix-blend-screen pointer-events-none`}
           />
         </AnimatePresence>
 
-        {/* Ambient Warm Vignette & Overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(0,0,0,0.08),rgba(0,0,0,0.52))] pointer-events-none" />
+        {/* Ambient Warm Golden Vignette & Lens Glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_50%,rgba(245,158,11,0.18),transparent_65%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.15),transparent_40%,rgba(0,0,0,0.65))] pointer-events-none" />
 
         {/* Inner Content Grid */}
         <div className="relative z-10 w-full px-5 py-4 sm:px-8 sm:py-6 grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
@@ -213,7 +225,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={handleCtaClick}
-              className="mt-3 sm:mt-4 inline-flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#FAF5EE] text-[#8F270B] font-black text-xs sm:text-sm shadow-md hover:bg-white hover:shadow-lg transition-all cursor-pointer group"
+              className="mt-3 sm:mt-4 inline-flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-[#FFC700] via-[#FFB800] to-[#FFA000] text-[#3D1000] font-black text-xs sm:text-sm shadow-lg shadow-black/40 hover:brightness-110 hover:shadow-amber-500/30 transition-all cursor-pointer group"
             >
               <span>{slide.ctaText}</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
@@ -229,7 +241,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.92 }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
-                className="relative w-32 h-32 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full p-2 bg-white/10 backdrop-blur-sm border border-white/20 shadow-2xl overflow-hidden shrink-0"
+                className="relative w-32 h-32 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full p-2 bg-black/40 backdrop-blur-md border border-amber-500/30 shadow-[0_0_35px_rgba(245,158,11,0.25)] overflow-hidden shrink-0"
               >
                 <Image
                   src={slide.image}
