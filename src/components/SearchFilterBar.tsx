@@ -46,7 +46,6 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
   const tagOptions = [
     { id: "all", label: "All" },
-    { id: "favorites", label: `❤️ Favorites (${favoriteCount})` },
     { id: "Beef", label: "Beef" },
     { id: "Chicken", label: "Chicken" },
     { id: "Fish", label: "Fish" },

@@ -159,20 +159,12 @@ export default function HomePage() {
   }, []);
 
   const handleToggleTheme = () => {
-    // Cycle: auto -> light -> dark -> auto
-    const nextMode: "auto" | "light" | "dark" =
-      themeMode === "auto" ? "light" : themeMode === "light" ? "dark" : "auto";
+    // 2 options only: toggles between light and dark
+    const nextMode: "light" | "dark" = isLightMode ? "dark" : "light";
     setThemeMode(nextMode);
     localStorage.setItem("kuku_theme_mode", nextMode);
 
-    let isDark = false;
-    if (nextMode === "auto") {
-      isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    } else {
-      isDark = nextMode === "dark";
-    }
-
-    if (isDark) {
+    if (nextMode === "dark") {
       document.documentElement.classList.add("dark");
       setIsLightMode(false);
     } else {

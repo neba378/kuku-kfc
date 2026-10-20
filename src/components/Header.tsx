@@ -124,7 +124,7 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </div>
 
-          {/* Theme Switcher (Auto/System -> Light -> Dark) */}
+          {/* Theme Switcher (2 options only: Light ↔ Dark) */}
           <motion.button
             whileTap={{ scale: 0.9 }}
             type="button"
@@ -134,20 +134,12 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             aria-label="Toggle Theme"
             className="p-1.5 sm:p-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-muted)] hover:text-[var(--brand-primary)] food-card-shadow transition-colors cursor-pointer"
-            title={
-              themeMode === "auto"
-                ? `Theme: Auto (${isLightMode ? "Light" : "Dark"}) • Click to switch`
-                : themeMode === "light"
-                ? "Theme: Light • Click to switch"
-                : "Theme: Dark • Click to switch"
-            }
+            title={isLightMode ? "Switch to Dark mode" : "Switch to Light mode"}
           >
-            {themeMode === "auto" ? (
-              <SunMoon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" />
-            ) : isLightMode ? (
-              <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+            {isLightMode ? (
+              <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" />
             ) : (
-              <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-300" />
+              <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
             )}
           </motion.button>
         </div>
