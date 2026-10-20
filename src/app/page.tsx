@@ -57,10 +57,12 @@ export default function HomePage() {
           const merged = INITIAL_MENU_ITEMS.map((initItem) => {
             const found = parsed.find((p) => p.id === initItem.id);
             if (!found) return initItem;
-            if (initItem.image.startsWith("/images/real/") && !found.image.startsWith("/images/real/")) {
-              return { ...found, image: initItem.image };
-            }
-            return { ...initItem, ...found };
+            const isCustomAdminImage = found.image?.startsWith("data:image") || found.image?.startsWith("blob:");
+            return {
+              ...initItem,
+              ...found,
+              image: isCustomAdminImage ? found.image : initItem.image,
+            };
           });
           const customItems = parsed.filter(
             (p) => !INITIAL_MENU_ITEMS.some((init) => init.id === p.id)
