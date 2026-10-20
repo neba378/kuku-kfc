@@ -487,7 +487,7 @@ export default function HomePage() {
 
           <div className="pt-1 flex items-center justify-center gap-3 text-xs text-[var(--text-subtle)] font-medium">
             <a
-              href="https://www.google.com/maps/place/Kuku+Fried+chicken/@9.0217783,38.8769058,17z/data=!3m1!4b1!4m6!3m5!1s0x164b91003dea4379:0x563d6f25a86038b9!8m2!3d9.021773!4d38.8794807"
+              href="https://maps.app.goo.gl/eLSbmirPZpL5QNUj9"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-[var(--brand-primary)] flex items-center gap-1 font-semibold transition-colors underline underline-offset-4"

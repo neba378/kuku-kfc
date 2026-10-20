@@ -91,9 +91,14 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                       <h4 className="text-sm font-bold text-[var(--text-main)]">
                         {t.dineIn}
                       </h4>
-                      <p className="text-[11px] text-[var(--text-muted)]">
-                        Bole Medhanialem Branch, Addis Ababa
-                      </p>
+                      <a
+                        href="https://maps.app.goo.gl/eLSbmirPZpL5QNUj9"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-[var(--brand-primary)] hover:underline flex items-center gap-1 font-semibold"
+                      >
+                        Ayat, Addis Ababa (Kuku Fried chicken)
+                      </a>
                     </div>
                   </div>
                   {orderMode === "dine-in" && (

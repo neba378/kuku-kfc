@@ -27,14 +27,20 @@ export const LocationBar: React.FC<LocationBarProps> = ({
     <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 pt-3 pb-1">
       {/* Restaurant Location & Hours info card (Tortilla aesthetic) */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 food-card-shadow flex items-center justify-between gap-3 transition-colors">
-        {/* Left: Location Pin & Open Status */}
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[var(--brand-subtle-bg)] text-[var(--brand-primary)] flex items-center justify-center shrink-0 border border-[var(--brand-subtle-border)]">
+        {/* Left: Location Pin & Open Status (Google Maps Link) */}
+        <a
+          href="https://maps.app.goo.gl/eLSbmirPZpL5QNUj9"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2.5 min-w-0 flex-1 group hover:opacity-95 transition-opacity cursor-pointer"
+          title="Open Kuku Fried chicken on Google Maps"
+        >
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[var(--brand-subtle-bg)] text-[var(--brand-primary)] flex items-center justify-center shrink-0 border border-[var(--brand-subtle-border)] group-hover:scale-105 transition-transform">
             <MapPin className="w-4 h-4 sm:w-5 sm:h-5 fill-[var(--brand-primary)]/20" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-black text-[var(--text-main)] truncate">
+              <span className="text-xs sm:text-sm font-black text-[var(--text-main)] truncate group-hover:text-[var(--brand-primary)] transition-colors">
                 Ayat, Addis Ababa (Kuku Fried chicken)
               </span>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 shrink-0">
@@ -47,7 +53,7 @@ export const LocationBar: React.FC<LocationBarProps> = ({
               <span>Dine-in & Takeaway • 9:00 AM to 11:00 PM</span>
             </p>
           </div>
-        </div>
+        </a>
 
         {/* Right: Quick Search input & Filter trigger */}
         <div className="relative flex items-center gap-1.5 shrink-0">
