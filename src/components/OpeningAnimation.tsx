@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles } from "lucide-react";
+import { X } from "lucide-react";
 import { Language } from "@/data/menu";
 import { soundFx } from "@/utils/soundEffects";
 
@@ -61,13 +61,6 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({
       : currentLanguage === "om"
       ? "Alaan kurkuraa, keessaan lallaafaa!"
       : "Crispy on the outside, juicy on the inside!";
-
-  const subText =
-    currentLanguage === "am"
-      ? "ሁልጊዜ ትኩስ · በልዩ ቅመም የተጠበሰ · የማይረሳ ጣዕም"
-      : currentLanguage === "om"
-      ? "Yeroo hunda haaraa · Mi'aawaa · Qulqullina olaanaa"
-      : "Always Fresh · Flame-Grilled & Crispy · Authentic Taste";
 
   return (
     <AnimatePresence>
@@ -179,13 +172,6 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({
             >
               <p className="text-sm sm:text-base font-extrabold text-[#FFF4D6] tracking-wide leading-snug drop-shadow-sm">
                 “{quoteText}”
-              </p>
-
-              <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent my-2" />
-
-              <p className="text-[11px] sm:text-xs font-semibold text-amber-300/90 tracking-wide flex items-center gap-1.5">
-                <Sparkles className="w-3 h-3 text-amber-400 shrink-0" />
-                {subText}
               </p>
             </motion.div>
 
