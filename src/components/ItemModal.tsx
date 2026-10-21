@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MenuItem, Language, UI_TRANSLATIONS } from "@/data/menu";
 import { X, CheckCircle2, Flame, Utensils } from "lucide-react";
@@ -36,6 +36,17 @@ export const ItemModal: React.FC<ItemModalProps> = ({
       : item.description;
 
   const isAvailable = item.isAvailable !== false;
+
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
+
+  useEffect(() => {
+    setSelectedSizeIndex(0);
+  }, [item?.id]);
+
+  const currentPrice =
+    item.sizes && item.sizes.length > 0
+      ? item.sizes[selectedSizeIndex]?.price ?? item.price
+      : item.price;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
@@ -106,6 +117,56 @@ export const ItemModal: React.FC<ItemModalProps> = ({
             {displayDescription}
           </p>
 
+          {/* Size Selector if item has multiple sizes */}
+          {item.sizes && item.sizes.length >= 2 && (
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-extrabold text-[var(--text-subtle)] uppercase tracking-wider block">
+                {currentLanguage === "am"
+                  ? "መጠን ይምረጡ"
+                  : currentLanguage === "om"
+                  ? "Hanga Filadhaa"
+                  : "Select Size"}
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {item.sizes.map((s, idx) => {
+                  const sName =
+                    currentLanguage === "am"
+                      ? s.nameAm
+                      : currentLanguage === "om"
+                      ? s.nameOm
+                      : s.name;
+                  const isSelected = selectedSizeIndex === idx;
+                  return (
+                    <button
+                      key={s.name}
+                      type="button"
+                      onClick={() => {
+                        soundFx.playPop();
+                        setSelectedSizeIndex(idx);
+                      }}
+                      className={`p-2.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                        isSelected
+                          ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)] shadow-md"
+                          : "bg-[var(--bg-surface-subtle)] border-[var(--border-subtle)] text-[var(--text-main)] hover:border-[var(--brand-primary)]/50"
+                      }`}
+                    >
+                      <span className="text-xs sm:text-sm font-black">
+                        {sName}
+                      </span>
+                      <span
+                        className={`text-xs font-black tabular-nums ${
+                          isSelected ? "text-white" : "text-[var(--brand-primary)]"
+                        }`}
+                      >
+                        {s.price} {item.currency}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Price & Tax Box */}
           <div className="p-3.5 sm:p-4 rounded-2xl bg-[var(--bg-surface-subtle)] border border-[var(--border-subtle)] flex items-center justify-between">
             <div>
@@ -114,7 +175,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               </span>
               <div className="flex items-baseline gap-1 mt-0.5">
                 <span className="text-2xl sm:text-3xl font-black text-[var(--brand-primary)] tabular-nums">
-                  {item.price.toLocaleString()}
+                  {currentPrice.toLocaleString()}
                 </span>
                 <span className="text-xs font-bold text-[var(--brand-primary)]/80 uppercase">
                   {item.currency}

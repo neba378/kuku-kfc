@@ -45,12 +45,24 @@ export const LocationBar: React.FC<LocationBarProps> = ({
               </span>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Open</span>
+                <span>
+                  {currentLanguage === "am"
+                    ? "ክፍት ነው"
+                    : currentLanguage === "om"
+                    ? "Banaa dha"
+                    : "Open"}
+                </span>
               </span>
             </div>
             <p className="text-[10px] sm:text-[11px] text-[var(--text-subtle)] font-medium flex items-center gap-1 truncate mt-0.5">
               <Clock className="w-3 h-3 text-[var(--brand-primary)] shrink-0" />
-              <span>Dine-in & Takeaway • 9:00 AM to 11:00 PM</span>
+              <span>
+                {currentLanguage === "am"
+                  ? "እዚሁ ለመመገብ እና ይዞ ለመሄድ • ከጠዋቱ 3:00 እስከ ማታ 5:00"
+                  : currentLanguage === "om"
+                  ? "Mana keessatti & Fudhatanii deemuuf • 3:00 WD - 5:00 WB"
+                  : "Dine-in & Takeaway • 9:00 AM to 11:00 PM"}
+              </span>
             </p>
           </div>
         </a>

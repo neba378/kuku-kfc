@@ -20,6 +20,13 @@ export interface CategoryInfo {
   image: string;
 }
 
+export interface SizeOption {
+  name: string;
+  nameAm: string;
+  nameOm: string;
+  price: number;
+}
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -39,6 +46,7 @@ export interface MenuItem {
   reviewCount?: string;
   badge?: string;
   isPopular?: boolean;
+  sizes?: SizeOption[];
 }
 
 export const CATEGORIES: CategoryInfo[] = [
@@ -469,6 +477,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   // DRINKS & JUICES
   {
     id: "kuku-juice-kuku-special",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 270 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 300 },
+    ],
     name: "KUKU Special Juice",
     nameAm: "ኩኩ ስፔሻል ጁስ",
     nameOm: "Juusii Addaa KUKU",
@@ -488,6 +500,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-shake-chocolate",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 290 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 320 },
+    ],
     name: "Chocolate Shake",
     nameAm: "ቸኮሌት ሼክ",
     nameOm: "Sheekii Chokoleetii",
@@ -504,6 +520,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-shake-milk",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 290 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 320 },
+    ],
     name: "Milk Shake",
     nameAm: "ሚልክ ሼክ",
     nameOm: "Sheekii Aannanii",
@@ -520,6 +540,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-avocado",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 270 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 350 },
+    ],
     name: "Avocado Juice",
     nameAm: "አቮካዶ ጁስ",
     nameOm: "Juusii Avokaadoo",
@@ -536,6 +560,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-banana",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 210 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 240 },
+    ],
     name: "Banana Juice",
     nameAm: "ሙዝ ጁስ",
     nameOm: "Juusii Muuzii",
@@ -552,6 +580,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-lemon",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 200 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 220 },
+    ],
     name: "Lemon Juice",
     nameAm: "ሎሚ ጁስ",
     nameOm: "Juusii Lomiitii",
@@ -568,6 +600,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-strawberry",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 270 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 290 },
+    ],
     name: "Strawberry Juice",
     nameAm: "እንጆሪ ጁስ",
     nameOm: "Juusii Istirooberii",
@@ -584,6 +620,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-mango",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 290 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 320 },
+    ],
     name: "Mango Juice",
     nameAm: "ማንጎ ጁስ",
     nameOm: "Juusii Maangoo",
@@ -600,6 +640,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-papaya",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 200 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 220 },
+    ],
     name: "Papaya Juice",
     nameAm: "ፓፓያ ጁስ",
     nameOm: "Juusii Paappayyaa",
@@ -616,6 +660,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-orange",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 250 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 300 },
+    ],
     name: "Orange Juice",
     nameAm: "ብርቱካን ጁስ",
     nameOm: "Juusii Burtukaanaa",
@@ -632,6 +680,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-pineapple",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 220 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 250 },
+    ],
     name: "Pineapple Juice",
     nameAm: "አናናስ ጁስ",
     nameOm: "Juusii Ananaasii",
@@ -648,6 +700,10 @@ export const INITIAL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "kuku-juice-watermelon",
+    sizes: [
+      { name: "Medium", nameAm: "መካከለኛ", nameOm: "Giddu-galeessa", price: 170 },
+      { name: "Large", nameAm: "ትልቅ", nameOm: "Guddaa", price: 190 },
+    ],
     name: "Watermelon Juice",
     nameAm: "ሐብሐብ ጁስ",
     nameOm: "Juusii Habhabii",

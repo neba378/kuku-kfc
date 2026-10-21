@@ -42,12 +42,21 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       headline:
         currentLanguage === "am"
           ? "ትኩስ። ቆራጣ። ልዩ ጣዕም።"
+          : currentLanguage === "om"
+          ? "HO'AA & HAARAA. MI'AAWAA FI DAWWATAA."
           : "HOT & FRESH. DELIVERED FAST.",
       subtitle:
         currentLanguage === "am"
           ? "በልዩ ዳቦ የተጠቀለለ ሻዋርማ፣ ክሪስፒ ፍራይድ ዶሮ እና ትኩስ ፒዛ በእርስዎ ምርጫ።"
+          : currentLanguage === "om"
+          ? "Shawaarmaa lukkuu addaa, lukkuu kurkuraa fi pizaa haaraa filannoo keessaniin."
           : "Flame-grilled double chicken shawarma, crispy fried chicken and stone-baked pizza made fresh.",
-      ctaText: currentLanguage === "am" ? "ሻዋርማዎችን እይ" : "Explore Shawarma",
+      ctaText:
+        currentLanguage === "am"
+          ? "ሻዋርማዎችን እይ"
+          : currentLanguage === "om"
+          ? "Shawaarmaa Ilaali"
+          : "Explore Shawarma",
       ctaCategory: "shawarma",
       image: "/images/real/real-special-shawarma.jpg",
       imageAlt: "KUKU Special Double Chicken Shawarma",
@@ -58,12 +67,21 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       headline:
         currentLanguage === "am"
           ? "የኩኩ ክሪስፒ ዶሮ ድግስ"
+          : currentLanguage === "om"
+          ? "LUKKUU KURKURAA MI'AAWAA"
           : "CRISPY FRIED TO PERFECTION",
       subtitle:
         currentLanguage === "am"
           ? "ወርቃማ ቆራጣ የዶሮ ቁራጮች ከድንች ጥብስ እና ከማዮኔዝ ሶስ ጋር።"
+          : currentLanguage === "om"
+          ? "Lukkuu kurkuraa warqee fakkaatu chiipsii dinichaa fi soosii addaatiin dhihaatu."
           : "Golden secret-recipe fried chicken served with seasoned crispy fries and signature dips.",
-      ctaText: currentLanguage === "am" ? "ክሪስፒ እይ" : "Explore Crispy",
+      ctaText:
+        currentLanguage === "am"
+          ? "ክሪስፒ እይ"
+          : currentLanguage === "om"
+          ? "Kurkuraa Ilaali"
+          : "Explore Crispy",
       ctaCategory: "chicken",
       image: "/images/real/real-crispy-chicken.jpg",
       imageAlt: "KUKU Crispy Chicken",
@@ -74,12 +92,21 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       headline:
         currentLanguage === "am"
           ? "ትኩስ የኩኩ ልዩ ፒዛ"
+          : currentLanguage === "om"
+          ? "PIZAA AYIBII MI'AAWAA"
           : "CHEESY STONE-BAKED PIZZA",
       subtitle:
         currentLanguage === "am"
           ? "በብዙ ሞዛሬላ አይብ፣ የተመረጡ ቅመሞች እና ትኩስ የዶሮ ስጋ የተጋገረ።"
+          : currentLanguage === "om"
+          ? "Ayibii mozaarellaa baqfame, qoricha aadaa fi foon lukkuutiin kan qophaa'e."
           : "Loaded with melted mozzarella, aromatic secret herbs, and tender seasoned chicken.",
-      ctaText: currentLanguage === "am" ? "ፒዛዎችን እይ" : "View Pizzas",
+      ctaText:
+        currentLanguage === "am"
+          ? "ፒዛዎችን እይ"
+          : currentLanguage === "om"
+          ? "Pizaa Ilaali"
+          : "View Pizzas",
       ctaCategory: "pizza",
       image: "/images/real/real-chicken-pizza.jpg",
       imageAlt: "KUKU Special Cheesy Pizza",

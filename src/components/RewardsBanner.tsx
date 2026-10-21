@@ -93,6 +93,8 @@ export const RewardsBanner: React.FC<RewardsBannerProps> = ({ currentLanguage })
               <p className="mt-1.5 text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
                 {currentLanguage === "am"
                   ? "ስልክ ቁጥርዎን በማስገባት የኩኩ ቪአይፒ ክለብ አባል ይሁኑ እና ነጻ የድንች ጥብስ እንዲሁም 10% የልደት ቅናሽ ያግኙ!"
+                  : currentLanguage === "om"
+                  ? "Lakkoofsa bilbilaa galchuun miseensa VIP KUKU ta'aa, chiipsii bilisaa fi guyyaa dhalootaa keessanitti hir'ifama %10 argadhaa!"
                   : "Join KUKU VIP Club today to receive free crispy fries on your next order, earn points, and get 10% birthday discount!"}
               </p>
 

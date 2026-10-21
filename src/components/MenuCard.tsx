@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { MenuItem, Language, UI_TRANSLATIONS } from "@/data/menu";
-import { Heart, Flame, Eye } from "lucide-react";
+import { Flame, Eye } from "lucide-react";
 import { soundFx } from "@/utils/soundEffects";
 
 interface MenuCardProps {
@@ -99,24 +99,6 @@ export const MenuCard: React.FC<MenuCardProps> = ({
               </span>
             </div>
           )}
-
-          {/* Top Right Favorite Heart Button */}
-          {onToggleFavorite && (
-            <button
-              type="button"
-              onClick={handleFavoriteClick}
-              aria-label="Save to favorites"
-              className={`absolute top-2 right-2 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                isFavorite
-                  ? "bg-red-500 text-white shadow-md scale-110 animate-bounce"
-                  : "bg-white/85 dark:bg-black/60 text-neutral-600 dark:text-neutral-300 hover:text-red-500 hover:scale-110 backdrop-blur-md"
-              }`}
-            >
-              <Heart
-                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite ? "fill-current" : ""}`}
-              />
-            </button>
-          )}
         </div>
 
         {/* Item Title - consistent bold font on mobile and desktop */}
@@ -140,14 +122,48 @@ export const MenuCard: React.FC<MenuCardProps> = ({
       {/* Price & View Button */}
       <div className="mt-2.5 sm:mt-3 pt-2 sm:pt-2.5 border-t border-[var(--border-subtle)] flex items-center justify-between">
         <div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-base sm:text-lg font-black text-[var(--brand-primary)] tracking-tight tabular-nums">
-              {item.price.toLocaleString()}
-            </span>
-            <span className="text-[11px] sm:text-xs font-bold text-[var(--brand-primary)]/80 uppercase">
-              {item.currency}
-            </span>
-          </div>
+          {item.sizes && item.sizes.length >= 2 ? (
+            <div>
+              <div className="flex items-center gap-1 text-[10px] font-extrabold uppercase text-[var(--text-subtle)]">
+                <span>
+                  {currentLanguage === "am"
+                    ? item.sizes[0].nameAm
+                    : currentLanguage === "om"
+                    ? item.sizes[0].nameOm
+                    : item.sizes[0].name}
+                </span>
+                <span>/</span>
+                <span>
+                  {currentLanguage === "am"
+                    ? item.sizes[1].nameAm
+                    : currentLanguage === "om"
+                    ? item.sizes[1].nameOm
+                    : item.sizes[1].name}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1 text-[var(--brand-primary)]">
+                <span className="text-sm sm:text-base font-black tabular-nums">
+                  {item.sizes[0].price}
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold text-[var(--brand-primary)]/70">/</span>
+                <span className="text-sm sm:text-base font-black tabular-nums">
+                  {item.sizes[1].price}
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold uppercase ml-0.5">
+                  {item.currency}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-baseline gap-1">
+              <span className="text-base sm:text-lg font-black text-[var(--brand-primary)] tracking-tight tabular-nums">
+                {item.price.toLocaleString()}
+              </span>
+              <span className="text-[11px] sm:text-xs font-bold text-[var(--brand-primary)]/80 uppercase">
+                {item.currency}
+              </span>
+            </div>
+          )}
           <span className="text-[10px] text-[var(--text-subtle)] font-medium">
             VAT Inc.
           </span>

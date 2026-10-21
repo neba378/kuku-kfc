@@ -26,16 +26,38 @@ export const DealsBanner: React.FC<DealsBannerProps> = ({
         <div className="relative z-10 flex flex-col items-start max-w-lg">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-600/25 border border-red-500/40 text-red-400 text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2.5">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>EXCLUSIVE DEAL</span>
+            <span>
+              {currentLanguage === "am"
+                ? "ልዩ ቅናሽ"
+                : currentLanguage === "om"
+                ? "KENNAA ADDAA"
+                : "EXCLUSIVE DEAL"}
+            </span>
           </div>
 
           <h3 className="text-xl sm:text-3xl font-black tracking-tight text-white leading-tight">
-            UP TO <span className="text-red-500">25% OFF</span> ON CHICKEN & SHAWARMA COMBOS
+            {currentLanguage === "am" ? (
+              <>
+                በዶሮ እና ሻዋርማ ኮምቦዎች ላይ እስከ{" "}
+                <span className="text-red-500">25% ቅናሽ</span>
+              </>
+            ) : currentLanguage === "om" ? (
+              <>
+                KOMBOO LUKKUU &amp; SHAWAARMAA IRRATTI HANGA{" "}
+                <span className="text-red-500">%25 HIR&apos;IFAMA</span>
+              </>
+            ) : (
+              <>
+                UP TO <span className="text-red-500">25% OFF</span> ON CHICKEN &amp; SHAWARMA COMBOS
+              </>
+            )}
           </h3>
 
           <p className="mt-1.5 text-xs sm:text-sm text-neutral-300 leading-relaxed">
             {currentLanguage === "am"
               ? "የሙሉ የተጠበሰ ዶሮ ወይም የሻዋርማ ፓኮች ከትልቅ ድንች ጥብስ እና ለስላሳ መጠጥ ጋር በተመጣጣኝ ዋጋ!"
+              : currentLanguage === "om"
+              ? "Komboo lukkuu wadamte yookiin shawaarmaa chiipsii dinichaa fi dhugaatii qabbanaa'aa waliin gatii madaalawaan!"
               : "Grab a full roasted chicken or twin shawarma combo with seasoned golden fries and cold drinks."}
           </p>
 
