@@ -397,27 +397,14 @@ export default function HomePage() {
               return (
                 <section key={cat.id} id={cat.id} className="scroll-mt-36">
                   {/* Category Section Header */}
-                  <div className="flex items-center justify-between mb-3 sm:mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="h-5 sm:h-6 w-1 rounded-full bg-gradient-to-b from-[var(--brand-primary)] to-[var(--brand-gold)]" />
-                      <h3 className="text-base sm:text-xl font-black tracking-tight text-[var(--text-main)] uppercase">
-                        {catName}
-                      </h3>
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-subtle)] food-card-shadow">
-                        {catItems.length}
-                      </span>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        soundFx.playPop();
-                        setActiveCategory(cat.id);
-                      }}
-                      className="text-xs font-black text-[var(--brand-primary)] hover:underline cursor-pointer"
-                    >
-                      {t.viewAll} →
-                    </button>
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                    <div className="h-5 sm:h-6 w-1 rounded-full bg-gradient-to-b from-[var(--brand-primary)] to-[var(--brand-gold)]" />
+                    <h3 className="text-base sm:text-xl font-black tracking-tight text-[var(--text-main)] uppercase">
+                      {catName}
+                    </h3>
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-subtle)] food-card-shadow">
+                      {catItems.length}
+                    </span>
                   </div>
 
                   {/* 2 Products per row on mobile (grid-cols-2), 3 on tablet, 4 on desktop */}

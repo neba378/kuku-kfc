@@ -25,6 +25,8 @@ import {
   KeyRound,
   ShieldCheck,
   RefreshCw,
+  Upload,
+  ImageIcon,
 } from "lucide-react";
 
 export default function AdminPage() {
@@ -53,6 +55,55 @@ export default function AdminPage() {
     tags: ["Chicken"],
     isAvailable: true,
   });
+
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string>("");
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadError("");
+
+    try {
+      const body = new FormData();
+      body.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body,
+      });
+      const data = await res.json();
+      if (data.success && data.url) {
+        setFormData((prev) => ({ ...prev, image: data.url }));
+      } else {
+        setUploadError(data.error || "Failed to upload image");
+      }
+    } catch {
+      setUploadError("Network error while uploading");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    if (!formData.image) return;
+    const currentUrl = formData.image;
+
+    if (currentUrl.startsWith("/uploads/")) {
+      try {
+        await fetch("/api/upload", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: currentUrl }),
+        });
+      } catch (err) {
+        console.error("Failed to delete from server:", err);
+      }
+    }
+    setFormData((prev) => ({ ...prev, image: "" }));
+  };
 
   // Load items from localStorage or fallback to INITIAL_MENU_ITEMS
   useEffect(() => {
@@ -547,17 +598,71 @@ export default function AdminPage() {
 
                 <div>
                   <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Image URL
+                    Image (Upload or Server Link)
                   </label>
-                  <input
-                    type="text"
-                    value={formData.image || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, image: e.target.value })
-                    }
-                    placeholder="/images/... or https://..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
-                  />
+
+                  <div className="space-y-2">
+                    {/* Image Preview & Delete Button */}
+                    {formData.image && (
+                      <div className="flex items-center gap-3 p-2 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)]">
+                        <div className="w-12 h-12 rounded-lg bg-neutral-900 overflow-hidden relative shrink-0 border border-white/10">
+                          <Image
+                            src={formData.image}
+                            alt="Preview"
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-mono text-[var(--text-main)] truncate">
+                            {formData.image}
+                          </p>
+                          <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-1 mt-0.5">
+                            <CheckCircle2 className="w-3 h-3" /> Image attached
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleDeleteImage}
+                          className="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+                          title="Delete image"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Upload button directly to server */}
+                    <div className="flex items-center gap-2">
+                      <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-dashed border-[var(--brand-primary)] bg-[var(--brand-subtle-bg)] hover:opacity-90 text-[var(--brand-primary)] text-xs font-bold cursor-pointer transition-all">
+                        <Upload className="w-4 h-4" />
+                        <span>{isUploading ? "Uploading to server..." : "Upload Image to Server"}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileUpload}
+                          disabled={isUploading}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+
+                    {uploadError && (
+                      <p className="text-xs text-red-500 font-semibold">{uploadError}</p>
+                    )}
+
+                    {/* Image URL text fallback */}
+                    <input
+                      type="text"
+                      value={formData.image || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, image: e.target.value })
+                      }
+                      placeholder="/images/... or https://..."
+                      className="w-full px-3 py-2 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-xs font-mono focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
                 </div>
               </div>
 
