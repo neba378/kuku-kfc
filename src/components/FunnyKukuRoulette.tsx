@@ -164,6 +164,7 @@ export const FunnyKukuRoulette: React.FC<FunnyKukuRouletteProps> = ({
                         src={selectedDish.image}
                         alt={selectedDish.name}
                         fill
+                        unoptimized={Boolean(selectedDish.image?.startsWith("data:"))}
                         className="object-cover"
                       />
                       {selectedDish.badge && (

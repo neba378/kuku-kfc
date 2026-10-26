@@ -29,6 +29,64 @@ import {
   ImageIcon,
 } from "lucide-react";
 
+// Client-side image optimizer to keep uploads lightweight, fast, and resilient across all platforms
+const compressImageFile = (
+  file: File,
+  maxWidth = 1000,
+  maxHeight = 1000,
+  quality = 0.82
+): Promise<{ blob: Blob; dataUrl: string }> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Failed to read image file"));
+    reader.onload = (e) => {
+      const img = new window.Image();
+      img.onerror = () => reject(new Error("Failed to decode image"));
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          const rawUrl = (e.target?.result as string) || "";
+          resolve({ blob: file, dataUrl: rawUrl });
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve({ blob, dataUrl });
+            } else {
+              resolve({ blob: file, dataUrl });
+            }
+          },
+          "image/jpeg",
+          quality
+        );
+      };
+      img.src = (e.target?.result as string) || "";
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [pinInput, setPinInput] = useState<string>("");
@@ -63,25 +121,44 @@ export default function AdminPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Reset input so selecting the same file again still fires event
+    e.target.value = "";
+
     setIsUploading(true);
     setUploadError("");
 
     try {
-      const body = new FormData();
-      body.append("file", file);
+      // 1. Optimize & resize client-side first (fast, reliable, ensures under ~100KB)
+      const { blob, dataUrl } = await compressImageFile(file);
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body,
-      });
-      const data = await res.json();
-      if (data.success && data.url) {
-        setFormData((prev) => ({ ...prev, image: data.url }));
-      } else {
-        setUploadError(data.error || "Failed to upload image");
+      // 2. Try uploading to server
+      try {
+        const body = new FormData();
+        body.append("file", blob, file.name || "menu-item.jpg");
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body,
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.url) {
+            setFormData((prev) => ({ ...prev, image: data.url }));
+            setIsUploading(false);
+            return;
+          }
+        }
+      } catch (serverErr) {
+        console.warn("Server filesystem upload unavailable, using optimized local storage:", serverErr);
       }
-    } catch {
-      setUploadError("Network error while uploading");
+
+      // 3. Fallback to client-side data URL (works everywhere: Vercel, offline, localhost)
+      setFormData((prev) => ({ ...prev, image: dataUrl }));
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to process image";
+      console.error("Upload error:", msg);
+      setUploadError("Could not process this image. Please select a valid PNG or JPG file.");
     } finally {
       setIsUploading(false);
     }
@@ -430,6 +507,7 @@ export default function AdminPage() {
                               src={item.image}
                               alt={item.name}
                               fill
+                              unoptimized={Boolean(item.image?.startsWith("data:"))}
                               className="object-cover"
                             />
                           )}
@@ -610,6 +688,7 @@ export default function AdminPage() {
                             src={formData.image}
                             alt="Preview"
                             fill
+                            unoptimized={Boolean(formData.image.startsWith("data:"))}
                             className="object-cover"
                           />
                         </div>

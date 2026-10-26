@@ -273,6 +273,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             src={item.image}
                             alt={item.name}
                             fill
+                            unoptimized={Boolean(item.image?.startsWith("data:"))}
                             className="object-cover"
                           />
                         </div>

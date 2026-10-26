@@ -80,6 +80,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({
               src={item.image}
               alt={item.name}
               fill
+              unoptimized={Boolean(item.image?.startsWith("data:"))}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover group-hover:scale-106 transition-transform duration-500 ease-out"
             />
