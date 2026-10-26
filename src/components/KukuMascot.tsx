@@ -81,7 +81,7 @@ export const KukuMascot: React.FC<KukuMascotProps> = ({
         newMood = "cool";
         message =
           currentLanguage === "am"
-            ? "የሚሰማ ቆራጣ ክሪስፒ ዶሮ! 🍗🔥"
+            ? "ቁርጥምጥም የሚል ክሪስፒ ዶሮ! 🍗🔥"
             : "Hear that crunch? That's the sound of happiness! 🍗🔥";
         break;
       case "burger":
@@ -143,7 +143,7 @@ export const KukuMascot: React.FC<KukuMascotProps> = ({
       currentLanguage === "am"
         ? [
             "ለምን መንገዱን አቋረጥኩ? ወደዚህ ሻዋርማ ለመድረስ ነዋ! 🌯",
-            "100% ቆራጣ፣ 0% ላባ! በልዩ ቅመም የተዘጋጀ! 😎🍗",
+            "100% ክሪስፒ፣ 0% ላባ! በልዩ ቅመም የተዘጋጀ! 😎🍗",
             "ጥሬ እውነታ: ድንች ጥብስ ፈጽሞ ወደ ቤት አይደርስም በመንገድ ያልቃል! 🍟",
             "የኩኩ ሚስጥር ቅመም ዛሬም ያልተፈታ ምስጢር ነው! 🤫",
             "በጣም ምርጥ ምርጫ! ምላስዎ ዛሬ ያመሰግንዎታል! 🤤",

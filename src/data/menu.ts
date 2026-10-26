@@ -1009,7 +1009,7 @@ export const UI_TRANSLATIONS = {
     outOfStock: "አልቋል",
     qrScanNotice: "በስልክዎ ላይ በቀጥታ ሜኑውን ለማየት ይቃኙ",
     shareMenu: "ሜኑውን አጋራ",
-    footerText: "ኩኩ ፍራይድ ቺከን፤ ትኩስ፣ ቆራጣ እና በእሳት ፍም በጥንቃቄ የተዘጋጀ።",
+    footerText: "ኩኩ ፍራይድ ቺከን፤ ትኩስ፣ ክሪስፒ እና በእሳት ፍም በጥንቃቄ የተዘጋጀ።",
     muralsTitle: "የሬስቶራንቱ ውስጣዊ የግድግዳ ስዕሎች",
     muralsSub: "በኩኩ ፍራይድ ቺከን ውስጥ በእጅ የተሳሉ ድንቅ የግድግዳ ስዕሎች",
   },

@@ -57,7 +57,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({
 
   const quoteText =
     currentLanguage === "am"
-      ? "ውጩ ቆራጣ፤ ውስጡ ጭማቂ!"
+      ? "ውጩ ክሪስፒ፤ ውስጡ ጭማቂ!"
       : currentLanguage === "om"
       ? "Alaan kurkuraa, keessaan lallaafaa!"
       : "Crispy on the outside, juicy on the inside!";

@@ -41,9 +41,9 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       id: "slide-shawarma",
       headline:
         currentLanguage === "am"
-          ? "ትኩስ። ቆራጣ። ልዩ ጣዕም።"
+          ? "ትኩስ። ክሪስፒ። ልዩ ጣዕም።"
           : currentLanguage === "om"
-          ? "HO'AA & HAARAA. MI'AAWAA FI DAWWATAA."
+          ? "HO'AA & KURKURAA. MI'AAWAA ADDAA."
           : "HOT & FRESH. DELIVERED FAST.",
       subtitle:
         currentLanguage === "am"
@@ -72,7 +72,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
           : "CRISPY FRIED TO PERFECTION",
       subtitle:
         currentLanguage === "am"
-          ? "ወርቃማ ቆራጣ የዶሮ ቁራጮች ከድንች ጥብስ እና ከማዮኔዝ ሶስ ጋር።"
+          ? "ወርቃማ ክሪስፒ የዶሮ ቁራጮች ከድንች ጥብስ እና ከማዮኔዝ ሶስ ጋር።"
           : currentLanguage === "om"
           ? "Lukkuu kurkuraa warqee fakkaatu chiipsii dinichaa fi soosii addaatiin dhihaatu."
           : "Golden secret-recipe fried chicken served with seasoned crispy fries and signature dips.",
