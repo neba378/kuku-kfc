@@ -18,7 +18,6 @@ import {
   Check,
   Flame,
   CheckCircle2,
-  XCircle,
   Sparkles,
   KeyRound,
   Lock,
@@ -266,51 +265,51 @@ function AddProductForm() {
   // If locked
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0B0F17] text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
-        <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl flex flex-col items-center text-center">
-          <div className="w-16 h-16 rounded-2xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-5 shadow-lg">
+      <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-main)] flex flex-col items-center justify-center p-4 relative overflow-hidden bg-ember-pattern selection:bg-[var(--brand-primary)] selection:text-white">
+        <div className="w-full max-w-md bg-[var(--bg-card)] border border-[var(--border-main)] rounded-3xl p-8 shadow-2xl food-card-shadow flex flex-col items-center text-center">
+          <div className="w-16 h-16 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-[var(--brand-primary)] mb-5 shadow-xs">
             <Lock className="w-8 h-8" />
           </div>
 
-          <h2 className="text-2xl font-black tracking-tight text-white">
+          <h2 className="text-2xl font-black tracking-tight text-[var(--text-main)]">
             Admin Authentication Required
           </h2>
-          <p className="text-xs text-slate-400 mt-2 mb-6">
+          <p className="text-xs text-[var(--text-muted)] mt-2 mb-6">
             Please enter your PIN to access the product creation page.
           </p>
 
           <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
             <div className="relative">
-              <KeyRound className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+              <KeyRound className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-subtle)]" />
               <input
                 type="password"
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 placeholder="Enter PIN (e.g. 8899)"
-                className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 font-mono text-center tracking-[0.25em] text-lg"
+                className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] placeholder-[var(--text-subtle)] text-sm focus:outline-none focus:border-[var(--brand-primary)] focus:ring-2 focus:ring-[var(--brand-primary)]/15 font-mono text-center tracking-[0.25em] text-lg"
                 autoFocus
               />
             </div>
 
             {pinError && (
-              <p className="text-xs text-rose-400 font-medium bg-rose-500/10 border border-rose-500/20 py-2 px-3 rounded-xl">
+              <p className="text-xs text-red-600 font-medium bg-red-50 border border-red-200 py-2 px-3 rounded-xl">
                 {pinError}
               </p>
             )}
 
             <button
               type="submit"
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm shadow-lg shadow-orange-500/25 hover:from-orange-400 hover:to-amber-400 cursor-pointer"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[var(--brand-primary)] to-amber-600 text-white font-bold text-sm shadow-lg shadow-orange-500/20 hover:brightness-105 cursor-pointer"
             >
               Unlock Page
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-slate-800 w-full flex items-center justify-between text-xs text-slate-400">
-            <Link href="/admin" className="flex items-center gap-1.5 hover:text-orange-400">
+          <div className="mt-6 pt-5 border-t border-[var(--border-subtle)] w-full flex items-center justify-between text-xs text-[var(--text-muted)]">
+            <Link href="/admin" className="flex items-center gap-1.5 hover:text-[var(--brand-primary)] font-medium">
               <ArrowLeft className="w-4 h-4" /> Go to Dashboard
             </Link>
-            <span className="font-mono bg-slate-800 px-2.5 py-1 rounded-lg">
+            <span className="font-mono bg-[var(--bg-surface-subtle)] text-[var(--text-muted)] px-2.5 py-1 rounded-lg border border-[var(--border-main)]">
               PIN: 8899
             </span>
           </div>
@@ -320,41 +319,53 @@ function AddProductForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F17] text-slate-100 pb-24 selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-main)] pb-24 bg-ember-pattern selection:bg-[var(--brand-primary)] selection:text-white">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-xl border-b border-slate-800 py-4 px-4 sm:px-8 shadow-sm shadow-black/40">
+      <header className="sticky top-0 z-40 bg-[var(--bg-header)] backdrop-blur-md border-b border-[var(--border-main)] py-3.5 px-4 sm:px-8 shadow-xs">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
               href="/admin"
-              className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-orange-500/40 text-slate-300 hover:text-white transition-all shadow-xs flex items-center gap-1.5 text-xs font-semibold"
+              className="p-2.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-main)] hover:border-[var(--brand-primary)]/40 text-[var(--text-muted)] hover:text-[var(--brand-primary)] transition-all shadow-xs flex items-center gap-1.5 text-xs font-semibold"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">Back to Products</span>
             </Link>
 
-            <div>
-              <h1 className="text-lg sm:text-xl font-black tracking-tight text-white flex items-center gap-2">
-                <Flame className="w-5 h-5 text-orange-500 fill-orange-500/20" />
-                {editId ? "Edit Product" : "Add New Product"}
-              </h1>
-              <p className="text-xs text-slate-400">
-                {editId ? "Update dish specifications, pricing, and media" : "Create a new dish or drink for your live restaurant menu"}
-              </p>
+            <div className="flex items-center gap-3">
+              <div className="relative w-9 h-9 rounded-full overflow-hidden p-0.5 bg-gradient-to-tr from-[var(--brand-gold)] via-[var(--brand-primary)] to-red-600 shadow-xs shrink-0">
+                <div className="w-full h-full rounded-full bg-[#FFD200] flex items-center justify-center overflow-hidden">
+                  <Image
+                    src="/images/kuku-logo.png"
+                    alt="KUKU Logo"
+                    width={36}
+                    height={36}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-base sm:text-lg font-black tracking-tight text-[var(--text-main)]">
+                  {editId ? "Edit Product" : "Add New Product"}
+                </h1>
+                <p className="text-xs text-[var(--text-muted)]">
+                  {editId ? "Update dish specifications, pricing, and media" : "Create a new dish or drink for your live restaurant menu"}
+                </p>
+              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <Link
               href="/admin"
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs sm:text-sm font-semibold border border-slate-700 transition-all cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-surface-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] text-xs sm:text-sm font-semibold border border-[var(--border-main)] transition-all cursor-pointer shadow-xs"
             >
               Cancel
             </Link>
             <button
               onClick={handleSave}
               disabled={saveSuccess}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white text-xs sm:text-sm font-bold shadow-lg shadow-orange-500/25 active:scale-95 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-75"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[var(--brand-primary)] to-amber-600 hover:brightness-105 text-white text-xs sm:text-sm font-bold shadow-md shadow-orange-500/20 active:scale-95 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-75"
             >
               {saveSuccess ? (
                 <>
@@ -378,18 +389,18 @@ function AddProductForm() {
           {/* Left Form Column (8 cols) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
             {/* Section 1: Basic Information */}
-            <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-orange-400" />
+            <div className="p-6 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-main)] food-card-shadow space-y-5">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--text-main)] flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[var(--brand-primary)]" />
                   Basic Information
                 </h3>
-                <span className="text-xs text-slate-500">* Required fields</span>
+                <span className="text-xs text-[var(--text-subtle)]">* Required fields</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                  <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1.5">
                     Product Name (English) *
                   </label>
                   <input
@@ -398,12 +409,12 @@ function AddProductForm() {
                     value={formData.name || ""}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. Double Chicken Shawarma"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] placeholder-[var(--text-subtle)] text-sm focus:outline-none focus:border-[var(--brand-primary)] focus:ring-2 focus:ring-[var(--brand-primary)]/15 transition-all shadow-2xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                  <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1.5">
                     Price (ETB) *
                   </label>
                   <input
@@ -411,20 +422,20 @@ function AddProductForm() {
                     required
                     value={formData.price || 0}
                     onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-amber-400 font-black text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--price-color)] font-black text-sm focus:outline-none focus:border-[var(--brand-primary)] focus:ring-2 focus:ring-[var(--brand-primary)]/15 transition-all shadow-2xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                  <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1.5">
                     Category *
                   </label>
                   <select
                     value={formData.category || "chicken"}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value as MenuCategoryId })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] text-sm focus:outline-none focus:border-[var(--brand-primary)] focus:ring-2 focus:ring-[var(--brand-primary)]/15 transition-all cursor-pointer shadow-2xs"
                   >
                     {CATEGORIES.map((cat) => (
                       <option key={cat.id} value={cat.id}>
@@ -435,12 +446,12 @@ function AddProductForm() {
                 </div>
 
                 <div className="flex flex-col justify-end">
-                  <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer text-xs font-bold text-slate-300 hover:border-slate-700 transition-all">
+                  <label className="flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-surface-subtle)] border border-[var(--border-main)] cursor-pointer text-xs font-bold text-[var(--text-main)] hover:border-[var(--brand-primary)]/40 transition-all">
                     <input
                       type="checkbox"
                       checked={formData.isAvailable !== false}
                       onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
-                      className="w-4 h-4 rounded text-orange-500 accent-orange-500 cursor-pointer"
+                      className="w-4 h-4 rounded text-[var(--brand-primary)] accent-[var(--brand-primary)] cursor-pointer"
                     />
                     <span>Item is currently In Stock & Active</span>
                   </label>
@@ -449,18 +460,18 @@ function AddProductForm() {
             </div>
 
             {/* Section 2: Product Image & Upload */}
-            <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                  <Upload className="w-4 h-4 text-orange-400" />
+            <div className="p-6 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-main)] food-card-shadow space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--text-main)] flex items-center gap-2">
+                  <Upload className="w-4 h-4 text-[var(--brand-primary)]" />
                   Product Image
                 </h3>
-                <span className="text-xs text-slate-500">Auto-compressed under 100KB</span>
+                <span className="text-xs text-[var(--text-subtle)]">Auto-compressed under 100KB</span>
               </div>
 
               {formData.image && (
-                <div className="flex items-center gap-4 p-3 rounded-2xl bg-slate-950/80 border border-slate-800">
-                  <div className="w-16 h-16 rounded-xl bg-slate-950 overflow-hidden relative shrink-0 border border-slate-700">
+                <div className="flex items-center gap-4 p-3 rounded-2xl bg-[var(--bg-surface-subtle)] border border-[var(--border-main)]">
+                  <div className="w-16 h-16 rounded-xl bg-[var(--bg-card)] overflow-hidden relative shrink-0 border border-[var(--border-main)]">
                     <Image
                       src={formData.image}
                       alt="Thumbnail preview"
@@ -470,17 +481,17 @@ function AddProductForm() {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-mono text-slate-300 truncate">
+                    <p className="text-xs font-mono text-[var(--text-main)] truncate">
                       {formData.image}
                     </p>
-                    <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1.5 mt-1">
+                    <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1.5 mt-1">
                       <CheckCircle2 className="w-3.5 h-3.5" /> High-Resolution Photo Ready
                     </span>
                   </div>
                   <button
                     type="button"
                     onClick={handleDeleteImage}
-                    className="px-3.5 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
+                    className="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Remove</span>
@@ -489,7 +500,7 @@ function AddProductForm() {
               )}
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <label className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl border border-dashed border-orange-500/50 bg-orange-500/10 hover:bg-orange-500/15 text-orange-400 text-xs sm:text-sm font-bold cursor-pointer transition-all">
+                <label className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl border border-dashed border-[var(--brand-subtle-border)] bg-[var(--brand-subtle-bg)] hover:bg-orange-100/70 text-[var(--brand-primary)] text-xs sm:text-sm font-bold cursor-pointer transition-all">
                   <Upload className="w-4 h-4" />
                   <span>{isUploading ? "Optimizing & uploading..." : "Upload Photo from Device"}</span>
                   <input
@@ -506,32 +517,32 @@ function AddProductForm() {
                   value={formData.image || ""}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                   placeholder="Or paste server image URL (/images/...)"
-                  className="flex-1 px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-700/80 text-xs font-mono text-slate-300 focus:outline-none focus:border-orange-500"
+                  className="flex-1 px-4 py-3 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-main)] text-xs font-mono text-[var(--text-main)] focus:outline-none focus:border-[var(--brand-primary)] shadow-2xs"
                 />
               </div>
 
               {uploadError && (
-                <p className="text-xs text-rose-400 font-semibold">{uploadError}</p>
+                <p className="text-xs text-red-600 font-semibold">{uploadError}</p>
               )}
             </div>
 
             {/* Section 3: Multilingual Names (Amharic & Afaan Oromoo) */}
-            <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-orange-400" />
+            <div className="p-6 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-main)] food-card-shadow space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--text-main)] flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-[var(--brand-primary)]" />
                   Multilingual Titles
                 </h3>
-                <span className="text-xs text-slate-500">Amharic & Afaan Oromoo</span>
+                <span className="text-xs text-[var(--text-subtle)]">Amharic & Afaan Oromoo</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 rounded-2xl bg-slate-950/50 border border-slate-800 space-y-2">
+                <div className="p-4 rounded-2xl bg-[var(--bg-surface-subtle)] border border-[var(--border-main)] space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
                       Amharic Title (አማርኛ)
                     </label>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-amber-400 border border-slate-700">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[var(--brand-subtle-bg)] text-[var(--brand-primary)] border border-[var(--brand-subtle-border)]">
                       AM
                     </span>
                   </div>
@@ -540,16 +551,16 @@ function AddProductForm() {
                     value={formData.nameAm || ""}
                     onChange={(e) => setFormData({ ...formData, nameAm: e.target.value })}
                     placeholder="ለምሳሌ፡ ድርብ የዶሮ ሻዋርማ"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] placeholder-[var(--text-subtle)] text-sm focus:outline-none focus:border-[var(--brand-primary)] shadow-2xs"
                   />
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-950/50 border border-slate-800 space-y-2">
+                <div className="p-4 rounded-2xl bg-[var(--bg-surface-subtle)] border border-[var(--border-main)] space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
                       Afaan Oromoo Title
                     </label>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-orange-400 border border-slate-700">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[var(--brand-subtle-bg)] text-[var(--brand-primary)] border border-[var(--brand-subtle-border)]">
                       OM
                     </span>
                   </div>
@@ -558,23 +569,23 @@ function AddProductForm() {
                     value={formData.nameOm || ""}
                     onChange={(e) => setFormData({ ...formData, nameOm: e.target.value })}
                     placeholder="fakkeenyaaf: Shawaarmaa Lukkuu Dachaa"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] placeholder-[var(--text-subtle)] text-sm focus:outline-none focus:border-[var(--brand-primary)] shadow-2xs"
                   />
                 </div>
               </div>
             </div>
 
             {/* Section 4: Descriptions */}
-            <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+            <div className="p-6 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-main)] food-card-shadow space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--text-main)]">
                   Dish Descriptions
                 </h3>
-                <span className="text-xs text-slate-500">All 3 Languages</span>
+                <span className="text-xs text-[var(--text-subtle)]">All 3 Languages</span>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1.5">
                   English Description
                 </label>
                 <textarea
@@ -582,13 +593,13 @@ function AddProductForm() {
                   value={formData.description || ""}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Freshly grilled chicken wrapped in warm flatbread..."
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] placeholder-[var(--text-subtle)] text-sm focus:outline-none focus:border-[var(--brand-primary)] resize-none shadow-2xs"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                  <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1.5">
                     Amharic Description (አማርኛ)
                   </label>
                   <textarea
@@ -596,12 +607,12 @@ function AddProductForm() {
                     value={formData.descriptionAm || ""}
                     onChange={(e) => setFormData({ ...formData, descriptionAm: e.target.value })}
                     placeholder="በትኩስ ዳቦ የተጠቀለለ ልዩ የዶሮ ሻዋርማ..."
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 resize-none"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] placeholder-[var(--text-subtle)] text-sm focus:outline-none focus:border-[var(--brand-primary)] resize-none shadow-2xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                  <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1.5">
                     Afaan Oromoo Description
                   </label>
                   <textarea
@@ -609,24 +620,24 @@ function AddProductForm() {
                     value={formData.descriptionOm || ""}
                     onChange={(e) => setFormData({ ...formData, descriptionOm: e.target.value })}
                     placeholder="Daabboo haaraadhaan maramee kan dhihaatu..."
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 resize-none"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] placeholder-[var(--text-subtle)] text-sm focus:outline-none focus:border-[var(--brand-primary)] resize-none shadow-2xs"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Live Card Preview (4 cols) */}
+          {/* Right Column: Live Customer Menu Preview (4 cols) */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             <div className="sticky top-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
-                <Eye className="w-4 h-4 text-orange-400" />
-                <span>Live Customer Menu Preview</span>
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] px-1">
+                <Eye className="w-4 h-4 text-[var(--brand-primary)]" />
+                <span>Live Customer Menu Card Preview</span>
               </div>
 
-              {/* The Live Card Replica */}
-              <div className="rounded-3xl bg-slate-900 border border-slate-800 p-4 shadow-2xl relative overflow-hidden">
-                <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 mb-3.5">
+              {/* Exact MenuCard Styling Replica */}
+              <div className="rounded-2xl sm:rounded-3xl bg-[var(--bg-card)] border border-[var(--border-main)] food-card-shadow p-3.5 sm:p-4 overflow-hidden relative">
+                <div className="relative w-full aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-[var(--bg-surface-subtle)] mb-3">
                   {formData.image ? (
                     <Image
                       src={formData.image}
@@ -636,65 +647,65 @@ function AddProductForm() {
                       className="object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-700">
-                      <Flame className="w-12 h-12 text-orange-500/40" />
+                    <div className="w-full h-full flex items-center justify-center text-[var(--brand-primary)]">
+                      <Flame className="w-12 h-12" />
                     </div>
                   )}
 
                   <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-orange-500 text-white shadow-md">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-[var(--brand-primary)] text-white shadow-xs">
                       {formData.category || "Chicken"}
                     </span>
                     {!formData.isAvailable && (
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-rose-600 text-white shadow-md">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-red-600 text-white shadow-xs">
                         Sold Out
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="space-y-1">
                   <div className="flex items-baseline justify-between gap-2">
-                    <h4 className="font-bold text-white text-base truncate">
+                    <h4 className="font-bold text-[var(--text-main)] text-base truncate">
                       {formData.name || "Product Name"}
                     </h4>
-                    <span className="font-black text-amber-400 text-base shrink-0">
-                      {(formData.price || 0).toLocaleString()} <span className="text-xs font-semibold text-slate-400">ETB</span>
+                    <span className="font-black text-[var(--price-color)] text-base shrink-0">
+                      {(formData.price || 0).toLocaleString()} <span className="text-xs font-semibold text-[var(--text-muted)]">ETB</span>
                     </span>
                   </div>
 
                   {formData.nameAm && (
-                    <p className="text-xs text-slate-300 font-medium truncate">
+                    <p className="text-xs text-[var(--text-muted)] font-medium truncate">
                       {formData.nameAm}
                     </p>
                   )}
 
-                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                    {formData.description || "Enter a description to see how it looks to your customers on the menu."}
+                  <p className="text-xs text-[var(--text-muted)] line-clamp-2 leading-relaxed pt-0.5">
+                    {formData.description || "Enter a description to preview how your customers see it on the live menu."}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3.5 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-500">
+                <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-[11px] text-[var(--text-subtle)]">
                   <span>VAT included</span>
-                  <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" /> Live Render
+                  <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Customer View
                   </span>
                 </div>
               </div>
 
               {/* Bottom Quick Action Box */}
-              <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 flex flex-col gap-2.5">
+              <div className="p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-main)] food-card-shadow flex flex-col gap-2.5">
                 <button
                   type="submit"
                   disabled={saveSuccess}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white font-bold text-sm shadow-lg shadow-orange-500/25 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[var(--brand-primary)] to-amber-600 hover:brightness-105 text-white font-bold text-sm shadow-md shadow-orange-500/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
                 >
                   <Save className="w-4 h-4" />
                   <span>{saveSuccess ? "Saved to Menu!" : "Save and Return"}</span>
                 </button>
                 <Link
                   href="/admin"
-                  className="w-full py-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold text-center border border-slate-700/60 transition-colors"
+                  className="w-full py-2.5 rounded-xl bg-[var(--bg-surface-subtle)] hover:bg-[var(--border-main)]/60 text-[var(--text-muted)] hover:text-[var(--text-main)] text-xs font-semibold text-center border border-[var(--border-main)] transition-colors"
                 >
                   Discard Changes
                 </Link>
@@ -711,7 +722,7 @@ export default function AddProductPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center text-slate-400">
+        <div className="min-h-screen bg-[var(--bg-app)] flex items-center justify-center text-[var(--text-muted)]">
           Loading Product Editor...
         </div>
       }
