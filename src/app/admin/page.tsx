@@ -7,7 +7,6 @@ import {
   MenuItem,
   CATEGORIES,
   INITIAL_MENU_ITEMS,
-  MenuCategoryId,
 } from "@/data/menu";
 import {
   Lock,
@@ -20,77 +19,13 @@ import {
   ArrowLeft,
   Database,
   Search,
-  Save,
-  X,
   KeyRound,
   ShieldCheck,
   RefreshCw,
-  Upload,
   Layers,
   Sparkles,
-  Globe,
-  Tag,
-  Check,
   Flame,
 } from "lucide-react";
-
-// Client-side image optimizer to keep uploads lightweight, fast, and resilient across all platforms
-const compressImageFile = (
-  file: File,
-  maxWidth = 1000,
-  maxHeight = 1000,
-  quality = 0.82
-): Promise<{ blob: Blob; dataUrl: string }> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("Failed to read image file"));
-    reader.onload = (e) => {
-      const img = new window.Image();
-      img.onerror = () => reject(new Error("Failed to decode image"));
-      img.onload = () => {
-        let width = img.width;
-        let height = img.height;
-
-        if (width > maxWidth || height > maxHeight) {
-          if (width > height) {
-            height = Math.round((height * maxWidth) / width);
-            width = maxWidth;
-          } else {
-            width = Math.round((width * maxHeight) / height);
-            height = maxHeight;
-          }
-        }
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-          const rawUrl = (e.target?.result as string) || "";
-          resolve({ blob: file, dataUrl: rawUrl });
-          return;
-        }
-
-        ctx.drawImage(img, 0, 0, width, height);
-        const dataUrl = canvas.toDataURL("image/jpeg", quality);
-
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve({ blob, dataUrl });
-            } else {
-              resolve({ blob: file, dataUrl });
-            }
-          },
-          "image/jpeg",
-          quality
-        );
-      };
-      img.src = (e.target?.result as string) || "";
-    };
-    reader.readAsDataURL(file);
-  });
-};
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -99,93 +34,6 @@ export default function AdminPage() {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
-  const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
-
-  // Form State for Add / Edit
-  const [formData, setFormData] = useState<Partial<MenuItem>>({
-    name: "",
-    nameAm: "",
-    nameOm: "",
-    category: "chicken",
-    price: 500,
-    currency: "ETB",
-    description: "",
-    descriptionAm: "",
-    descriptionOm: "",
-    image: "/images/crispy-chicken.jpg",
-    vatIncluded: true,
-    tags: ["Chicken"],
-    isAvailable: true,
-  });
-
-  const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [uploadError, setUploadError] = useState<string>("");
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Reset input so selecting the same file again still fires event
-    e.target.value = "";
-
-    setIsUploading(true);
-    setUploadError("");
-
-    try {
-      // 1. Optimize & resize client-side first (fast, reliable, ensures under ~100KB)
-      const { blob, dataUrl } = await compressImageFile(file);
-
-      // 2. Try uploading to server
-      try {
-        const body = new FormData();
-        body.append("file", blob, file.name || "menu-item.jpg");
-
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body,
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success && data.url) {
-            setFormData((prev) => ({ ...prev, image: data.url }));
-            setIsUploading(false);
-            return;
-          }
-        }
-      } catch (serverErr) {
-        console.warn("Server filesystem upload unavailable, using optimized local storage:", serverErr);
-      }
-
-      // 3. Fallback to client-side data URL (works everywhere: Vercel, offline, localhost)
-      setFormData((prev) => ({ ...prev, image: dataUrl }));
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to process image";
-      console.error("Upload error:", msg);
-      setUploadError("Could not process this image. Please select a valid PNG or JPG file.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleDeleteImage = async () => {
-    if (!formData.image) return;
-    const currentUrl = formData.image;
-
-    if (currentUrl.startsWith("/uploads/")) {
-      try {
-        await fetch("/api/upload", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: currentUrl }),
-        });
-      } catch (err) {
-        console.error("Failed to delete from server:", err);
-      }
-    }
-    setFormData((prev) => ({ ...prev, image: "" }));
-  };
 
   // Load items from localStorage or fallback to INITIAL_MENU_ITEMS
   useEffect(() => {
@@ -219,7 +67,6 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Default PIN: 8899 or custom password 'kuku2026'
     if (pinInput === "8899" || pinInput === "kuku2026") {
       setIsAuthenticated(true);
       setPinError("");
@@ -245,66 +92,6 @@ export default function AdminPage() {
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       const updated = items.filter((it) => it.id !== id);
       saveItems(updated);
-    }
-  };
-
-  const handleOpenEdit = (item: MenuItem) => {
-    setEditingItem(item);
-    setFormData({ ...item });
-  };
-
-  const handleOpenAdd = () => {
-    setIsAddingNew(true);
-    setFormData({
-      id: `kuku-${Date.now()}`,
-      name: "",
-      nameAm: "",
-      nameOm: "",
-      category: "chicken",
-      price: 600,
-      currency: "ETB",
-      description: "",
-      descriptionAm: "",
-      descriptionOm: "",
-      image: "/images/crispy-chicken.jpg",
-      vatIncluded: true,
-      tags: ["Popular"],
-      isAvailable: true,
-    });
-  };
-
-  const handleSaveForm = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.price) {
-      alert("Name and Price are required.");
-      return;
-    }
-
-    if (editingItem) {
-      const updated = items.map((it) =>
-        it.id === editingItem.id ? ({ ...it, ...formData } as MenuItem) : it
-      );
-      saveItems(updated);
-      setEditingItem(null);
-    } else if (isAddingNew) {
-      const newItem: MenuItem = {
-        id: formData.id || `kuku-${Date.now()}`,
-        name: formData.name || "",
-        nameAm: formData.nameAm || formData.name || "",
-        nameOm: formData.nameOm || formData.name || "",
-        category: (formData.category as MenuCategoryId) || "chicken",
-        price: Number(formData.price),
-        currency: "ETB",
-        description: formData.description || "",
-        descriptionAm: formData.descriptionAm || "",
-        descriptionOm: formData.descriptionOm || "",
-        image: formData.image || "/images/crispy-chicken.jpg",
-        vatIncluded: true,
-        tags: formData.tags || [],
-        isAvailable: formData.isAvailable !== false,
-      };
-      saveItems([newItem, ...items]);
-      setIsAddingNew(false);
     }
   };
 
@@ -426,13 +213,13 @@ export default function AdminPage() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <button
-              onClick={handleOpenAdd}
+            <Link
+              href="/admin/add"
               className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-orange-500/20 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add Product</span>
-            </button>
+            </Link>
             <button
               onClick={handleLogout}
               className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 transition-all text-xs font-semibold cursor-pointer"
@@ -641,13 +428,13 @@ export default function AdminPage() {
 
                       <td className="py-3.5 px-4 sm:px-6 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleOpenEdit(item)}
-                            className="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-500/40 text-slate-300 hover:text-amber-400 transition-all cursor-pointer"
-                            title="Edit product"
+                          <Link
+                            href={`/admin/add?edit=${item.id}`}
+                            className="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-500/40 text-slate-300 hover:text-amber-400 transition-all cursor-pointer inline-flex items-center justify-center"
+                            title="Edit product on dedicated page"
                           >
                             <Pencil className="w-4 h-4" />
-                          </button>
+                          </Link>
                           <button
                             onClick={() => handleDeleteItem(item.id, item.name)}
                             className="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/40 text-slate-300 hover:text-rose-400 transition-all cursor-pointer"
@@ -665,300 +452,6 @@ export default function AdminPage() {
           </div>
         </div>
       </main>
-
-      {/* Edit or Add Modal */}
-      {(editingItem || isAddingNew) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div
-            className="w-full max-w-2xl bg-slate-900 border border-slate-800 text-white rounded-3xl p-6 sm:p-7 shadow-2xl shadow-black/90 my-8 relative z-10"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-              <div>
-                <h3 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
-                  <Flame className="w-5 h-5 text-orange-500" />
-                  {editingItem ? "Edit Product" : "Add New Product"}
-                </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Update item details, translations, pricing, and high-res photography
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setEditingItem(null);
-                  setIsAddingNew(false);
-                }}
-                className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveForm} className="flex flex-col gap-5">
-              {/* Row 1: English Name & Price */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="sm:col-span-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                    Product Name (English) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    placeholder="e.g. Double Chicken Shawarma"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                    Price (ETB) *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    value={formData.price || 0}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        price: Number(e.target.value),
-                      })
-                    }
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-amber-400 font-black text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Row 2: Category & Availability */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                    Category *
-                  </label>
-                  <select
-                    value={formData.category || "chicken"}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        category: e.target.value as MenuCategoryId,
-                      })
-                    }
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all cursor-pointer"
-                  >
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="flex flex-col justify-end">
-                  <label className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer text-xs font-bold text-slate-300 hover:border-slate-700 transition-all">
-                    <input
-                      type="checkbox"
-                      checked={formData.isAvailable !== false}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          isAvailable: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 rounded text-orange-500 accent-orange-500 cursor-pointer"
-                    />
-                    <span>Item is currently In Stock & Active</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Row 3: Product Image Upload & Link */}
-              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-                  Product Image
-                </label>
-
-                {formData.image && (
-                  <div className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-                    <div className="w-14 h-14 rounded-xl bg-slate-950 overflow-hidden relative shrink-0 border border-slate-700">
-                      <Image
-                        src={formData.image}
-                        alt="Preview"
-                        fill
-                        unoptimized={Boolean(formData.image.startsWith("data:"))}
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-mono text-slate-300 truncate">
-                        {formData.image}
-                      </p>
-                      <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
-                        <Check className="w-3.5 h-3.5" /> Image attached
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleDeleteImage}
-                      className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
-                      title="Remove image"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      <span>Remove</span>
-                    </button>
-                  </div>
-                )}
-
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-                  <label className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/15 text-orange-400 text-xs font-bold cursor-pointer transition-all">
-                    <Upload className="w-4 h-4" />
-                    <span>{isUploading ? "Optimizing & uploading..." : "Upload New Image from Device"}</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      disabled={isUploading}
-                      className="hidden"
-                    />
-                  </label>
-
-                  <input
-                    type="text"
-                    value={formData.image || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, image: e.target.value })
-                    }
-                    placeholder="Or enter path / URL (/images/...)"
-                    className="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-
-                {uploadError && (
-                  <p className="text-xs text-rose-400 font-semibold">{uploadError}</p>
-                )}
-              </div>
-
-              {/* Row 4: Multilingual Names (Amharic & Afaan Oromoo) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-3.5 rounded-2xl bg-slate-950/40 border border-slate-800 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-                      Name in Amharic (አማርኛ)
-                    </label>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-400">AM</span>
-                  </div>
-                  <input
-                    type="text"
-                    value={formData.nameAm || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, nameAm: e.target.value })
-                    }
-                    placeholder="ለምሳሌ፡ ድርብ የዶሮ ሻዋርማ"
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-slate-950/40 border border-slate-800 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-                      Name in Afaan Oromoo
-                    </label>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-400">OM</span>
-                  </div>
-                  <input
-                    type="text"
-                    value={formData.nameOm || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, nameOm: e.target.value })
-                    }
-                    placeholder="fakkeenyaaf: Shawaarmaa Lukkuu Dachaa"
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-              </div>
-
-              {/* Row 5: English Description */}
-              <div>
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                  Description (English)
-                </label>
-                <textarea
-                  rows={2}
-                  value={formData.description || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  placeholder="Freshly grilled chicken wrapped in warm flatbread..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-none"
-                />
-              </div>
-
-              {/* Row 6: Multilingual Descriptions */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                    Description (አማርኛ)
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={formData.descriptionAm || ""}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        descriptionAm: e.target.value,
-                      })
-                    }
-                    placeholder="በትኩስ ዳቦ የተጠቀለለ..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                    Description (Afaan Oromoo)
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={formData.descriptionOm || ""}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        descriptionOm: e.target.value,
-                      })
-                    }
-                    placeholder="Daabboo haaraadhaan maramee..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-none"
-                  />
-                </div>
-              </div>
-
-              {/* Modal Actions */}
-              <div className="flex items-center justify-end gap-3 pt-5 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingItem(null);
-                    setIsAddingNew(false);
-                  }}
-                  className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-sm font-semibold border border-slate-700 transition-all cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white text-sm font-bold shadow-lg shadow-orange-500/25 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
-                >
-                  <Save className="w-4 h-4" />
-                  <span>Save Product</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
