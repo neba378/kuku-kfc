@@ -26,7 +26,12 @@ import {
   ShieldCheck,
   RefreshCw,
   Upload,
-  ImageIcon,
+  Layers,
+  Sparkles,
+  Globe,
+  Tag,
+  Check,
+  Flame,
 } from "lucide-react";
 
 // Client-side image optimizer to keep uploads lightweight, fast, and resilient across all platforms
@@ -321,57 +326,68 @@ export default function AdminPage() {
     return matchesCategory && matchesSearch;
   });
 
+  const totalCount = items.length;
+  const inStockCount = items.filter((it) => it.isAvailable !== false).length;
+  const soldOutCount = totalCount - inStockCount;
+  const categoriesCount = new Set(items.map((it) => it.category)).size;
+
   // IF LOCKED / NOT AUTHENTICATED
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-main)] flex flex-col items-center justify-center p-4 bg-ember-pattern">
-        <div className="w-full max-w-md bg-[var(--bg-card)] border border-[var(--border-main)] rounded-3xl p-8 shadow-2xl flex flex-col items-center text-center">
-          <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 mb-4 shadow-lg shadow-red-500/10">
+      <div className="min-h-screen bg-[#0B0F17] text-white flex flex-col items-center justify-center p-4 relative overflow-hidden selection:bg-orange-500 selection:text-white">
+        {/* Ambient Warm Glow Circles */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-orange-600/20 to-amber-500/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-red-600/10 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 backdrop-blur-2xl rounded-3xl p-8 sm:p-10 shadow-2xl shadow-black/80 flex flex-col items-center text-center relative z-10">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-5 shadow-lg shadow-orange-500/10">
             <Lock className="w-8 h-8" />
           </div>
 
-          <h2 className="text-2xl font-black tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             KUKU Admin Portal
           </h2>
-          <p className="text-xs text-[var(--text-muted)] mt-1 mb-6">
-            Secured product & menu management system. Please authenticate to continue.
+          <p className="text-xs sm:text-sm text-slate-400 mt-2 mb-8 leading-relaxed">
+            Secured product & menu management system. Please authenticate with your PIN to continue.
           </p>
 
           <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
             <div className="relative">
-              <KeyRound className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-subtle)]" />
+              <KeyRound className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="password"
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 placeholder="Enter PIN (e.g. 8899)"
-                className="w-full pl-11 pr-4 py-3 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500 font-mono text-center tracking-widest text-lg"
+                className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 font-mono text-center tracking-[0.25em] text-lg transition-all"
                 autoFocus
               />
             </div>
 
             {pinError && (
-              <p className="text-xs text-red-400 font-medium">{pinError}</p>
+              <p className="text-xs text-rose-400 font-medium bg-rose-500/10 border border-rose-500/20 py-2 px-3 rounded-xl">
+                {pinError}
+              </p>
             )}
 
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold text-sm shadow-lg shadow-orange-600/30 hover:brightness-110 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm shadow-lg shadow-orange-500/25 hover:from-orange-400 hover:to-amber-400 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Unlock className="w-4 h-4" />
               Unlock Dashboard
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-[var(--border-subtle)] w-full flex items-center justify-between text-xs text-[var(--text-subtle)]">
+          <div className="mt-8 pt-6 border-t border-slate-800/80 w-full flex items-center justify-between text-xs text-slate-400">
             <Link
               href="/"
-              className="flex items-center gap-1 hover:text-amber-400 transition-colors"
+              className="flex items-center gap-1.5 hover:text-orange-400 transition-colors font-medium"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Back to Menu
+              <ArrowLeft className="w-4 h-4" /> Back to Menu
             </Link>
-            <span className="font-mono bg-[var(--bg-muted)] px-2 py-0.5 rounded">
-              Default: 8899
+            <span className="font-mono bg-slate-800/80 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700/50">
+              PIN: 8899
             </span>
           </div>
         </div>
@@ -381,45 +397,46 @@ export default function AdminPage() {
 
   // IF AUTHENTICATED
   return (
-    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-main)] pb-20">
-      {/* Top Navbar */}
-      <header className="sticky top-0 z-40 bg-[var(--bg-header)] backdrop-blur-md border-b border-[var(--border-main)] py-3 px-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-[#0B0F17] text-slate-100 pb-24 selection:bg-orange-500 selection:text-white">
+      {/* Top Sleek Navbar */}
+      <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-xl border-b border-slate-800 py-3.5 px-4 sm:px-6 shadow-sm shadow-black/40">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
             <Link
               href="/"
-              className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] hover:border-amber-500/40 text-[var(--text-muted)] hover:text-white transition-colors"
+              className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-orange-500/40 text-slate-300 hover:text-white transition-all shadow-xs"
               title="Go to customer menu"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg font-black tracking-tight">
+              <div className="flex items-center gap-2.5">
+                <h1 className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-2">
+                  <Flame className="w-5 h-5 text-orange-500 fill-orange-500/20" />
                   KUKU Product Manager
                 </h1>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3" /> Locked Session
+                <span className="hidden sm:inline-flex text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5" /> Authenticated
                 </span>
               </div>
-              <p className="text-xs text-[var(--text-muted)]">
-                {items.length} total products loaded
+              <p className="text-xs text-slate-400">
+                Live menu catalogue & realtime pricing control
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button
               onClick={handleOpenAdd}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 hover:brightness-110 active:scale-95 transition-all"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-orange-500/20 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              Add Product
+              <span>Add Product</span>
             </button>
             <button
               onClick={handleLogout}
-              className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-muted)] hover:text-red-400 text-xs font-semibold"
-              title="Lock Admin"
+              className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 transition-all text-xs font-semibold cursor-pointer"
+              title="Lock and Log out"
             >
               <Lock className="w-4 h-4" />
             </button>
@@ -427,50 +444,96 @@ export default function AdminPage() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 pt-6 flex flex-col gap-6">
-        {/* Database Ready Banner */}
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-red-500/10 border border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 shrink-0">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 flex flex-col gap-6">
+        {/* Metric Cards Summary */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4">
+          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center gap-3.5">
+            <div className="p-3 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 shrink-0">
               <Database className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-amber-300">
-                Database Connection Ready
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Items</p>
+              <p className="text-xl sm:text-2xl font-black text-white">{totalCount}</p>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center gap-3.5">
+            <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">In Stock</p>
+              <p className="text-xl sm:text-2xl font-black text-emerald-400">{inStockCount}</p>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center gap-3.5">
+            <div className="p-3 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 shrink-0">
+              <XCircle className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Sold Out</p>
+              <p className="text-xl sm:text-2xl font-black text-rose-400">{soldOutCount}</p>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center gap-3.5">
+            <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">
+              <Layers className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Categories</p>
+              <p className="text-xl sm:text-2xl font-black text-amber-400">{categoriesCount}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Database Sync Banner */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900 border border-slate-800/90 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="p-2.5 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 shrink-0">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                Real-Time Menu Sync
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  Active
+                </span>
               </h3>
-              <p className="text-xs text-[var(--text-muted)]">
-                Currently running in active local cache. Provide your DB connection link to synchronize automatically with PostgreSQL / Supabase / Neon!
+              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                Changes saved here reflect instantly on the customer-facing menu. Use reset if you wish to restore original verified items.
               </p>
             </div>
           </div>
           <button
             onClick={handleResetToDefault}
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-subtle)] hover:text-white flex items-center gap-1 shrink-0"
+            className="text-xs font-semibold px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            Reset Defaults
+            <span>Reset Defaults</span>
           </button>
         </div>
 
         {/* Filter and Search Bar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-subtle)]" />
+            <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search products by name or description..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+              placeholder="Search products by English, Amharic or Afaan Oromoo name..."
+              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
             />
           </div>
 
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3.5 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+            className="px-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all cursor-pointer"
           >
-            <option value="all">All Categories</option>
+            <option value="all">All Categories ({totalCount})</option>
             {CATEGORIES.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
@@ -479,114 +542,124 @@ export default function AdminPage() {
           </select>
         </div>
 
-        {/* Product Table / Cards */}
-        <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-main)] overflow-hidden shadow-sm">
+        {/* Product Table */}
+        <div className="rounded-2xl bg-slate-900/80 border border-slate-800 shadow-xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-[var(--bg-muted)] text-[var(--text-subtle)] uppercase text-[11px] tracking-wider border-b border-[var(--border-main)]">
+              <thead className="bg-slate-950/80 text-slate-400 uppercase text-[11px] font-bold tracking-wider border-b border-slate-800">
                 <tr>
-                  <th className="py-3 px-4">Dish</th>
-                  <th className="py-3 px-4">Category</th>
-                  <th className="py-3 px-4">Price</th>
-                  <th className="py-3 px-4">Amharic / Oromo</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th className="py-3.5 px-4 sm:px-6">Dish Details</th>
+                  <th className="py-3.5 px-4">Category</th>
+                  <th className="py-3.5 px-4">Price</th>
+                  <th className="py-3.5 px-4">Amharic / Oromo</th>
+                  <th className="py-3.5 px-4">Availability</th>
+                  <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--border-subtle)]">
-                {filteredItems.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="hover:bg-[var(--bg-card-hover)] transition-colors"
-                  >
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-neutral-900 overflow-hidden relative shrink-0">
-                          {item.image && (
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              fill
-                              unoptimized={Boolean(item.image?.startsWith("data:"))}
-                              className="object-cover"
-                            />
-                          )}
-                        </div>
-                        <div>
-                          <p className="font-bold text-[var(--text-main)]">
-                            {item.name}
-                          </p>
-                          <p className="text-xs text-[var(--text-muted)] line-clamp-1 max-w-xs">
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td className="py-3 px-4">
-                      <span className="text-xs font-semibold px-2 py-1 rounded-md bg-[var(--bg-muted)] text-[var(--text-subtle)] uppercase">
-                        {item.category}
-                      </span>
-                    </td>
-
-                    <td className="py-3 px-4">
-                      <span className="font-black text-amber-400">
-                        {item.price.toLocaleString()} {item.currency}
-                      </span>
-                    </td>
-
-                    <td className="py-3 px-4 text-xs text-[var(--text-muted)]">
-                      <p className="font-medium text-[var(--text-main)]">
-                        {item.nameAm || "-"}
-                      </p>
-                      <p className="text-[var(--text-subtle)]">
-                        {item.nameOm || "-"}
-                      </p>
-                    </td>
-
-                    <td className="py-3 px-4">
-                      <button
-                        onClick={() => handleToggleAvailability(item.id)}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-colors ${
-                          item.isAvailable !== false
-                            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                            : "bg-red-500/15 text-red-400 border border-red-500/30"
-                        }`}
-                      >
-                        {item.isAvailable !== false ? (
-                          <>
-                            <CheckCircle2 className="w-3.5 h-3.5" /> Available
-                          </>
-                        ) : (
-                          <>
-                            <XCircle className="w-3.5 h-3.5" /> Sold Out
-                          </>
-                        )}
-                      </button>
-                    </td>
-
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => handleOpenEdit(item)}
-                          className="p-2 rounded-lg bg-[var(--bg-muted)] text-[var(--text-muted)] hover:text-amber-400 hover:bg-amber-500/10 transition-colors"
-                          title="Edit"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleDeleteItem(item.id, item.name)
-                          }
-                          className="p-2 rounded-lg bg-[var(--bg-muted)] text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+              <tbody className="divide-y divide-slate-800/60">
+                {filteredItems.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-slate-500">
+                      No products found matching your search.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredItems.map((item) => (
+                    <tr
+                      key={item.id}
+                      className="hover:bg-slate-800/40 transition-colors group"
+                    >
+                      <td className="py-3.5 px-4 sm:px-6">
+                        <div className="flex items-center gap-3.5">
+                          <div className="w-13 h-13 rounded-xl bg-slate-950 overflow-hidden relative shrink-0 border border-slate-800 shadow-xs">
+                            {item.image ? (
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                fill
+                                unoptimized={Boolean(item.image?.startsWith("data:"))}
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-slate-600">
+                                <Flame className="w-6 h-6 text-orange-500" />
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-bold text-white text-sm sm:text-base">
+                              {item.name}
+                            </p>
+                            <p className="text-xs text-slate-400 line-clamp-1 max-w-xs sm:max-w-md mt-0.5">
+                              {item.description || "No description provided"}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-4">
+                        <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700/60 uppercase tracking-wide">
+                          {item.category}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span className="font-black text-amber-400 text-base">
+                          {item.price.toLocaleString()} <span className="text-xs font-semibold text-slate-400">{item.currency}</span>
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4 text-xs">
+                        <p className="font-semibold text-slate-200">
+                          {item.nameAm || "-"}
+                        </p>
+                        <p className="text-slate-400 mt-0.5">
+                          {item.nameOm || "-"}
+                        </p>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <button
+                          onClick={() => handleToggleAvailability(item.id)}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                            item.isAvailable !== false
+                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20"
+                              : "bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20"
+                          }`}
+                        >
+                          {item.isAvailable !== false ? (
+                            <>
+                              <CheckCircle2 className="w-3.5 h-3.5" /> In Stock
+                            </>
+                          ) : (
+                            <>
+                              <XCircle className="w-3.5 h-3.5" /> Sold Out
+                            </>
+                          )}
+                        </button>
+                      </td>
+
+                      <td className="py-3.5 px-4 sm:px-6 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleOpenEdit(item)}
+                            className="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-500/40 text-slate-300 hover:text-amber-400 transition-all cursor-pointer"
+                            title="Edit product"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteItem(item.id, item.name)}
+                            className="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/40 text-slate-300 hover:text-rose-400 transition-all cursor-pointer"
+                            title="Delete product"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -595,31 +668,39 @@ export default function AdminPage() {
 
       {/* Edit or Add Modal */}
       {(editingItem || isAddingNew) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
           <div
-            className="w-full max-w-xl bg-[var(--bg-card)] border border-[var(--border-main)] rounded-3xl p-6 shadow-2xl my-8"
+            className="w-full max-w-2xl bg-slate-900 border border-slate-800 text-white rounded-3xl p-6 sm:p-7 shadow-2xl shadow-black/90 my-8 relative z-10"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)] mb-5">
-              <h3 className="text-lg font-black tracking-tight">
-                {editingItem ? "Edit Product" : "Add New Product"}
-              </h3>
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+              <div>
+                <h3 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
+                  <Flame className="w-5 h-5 text-orange-500" />
+                  {editingItem ? "Edit Product" : "Add New Product"}
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Update item details, translations, pricing, and high-res photography
+                </p>
+              </div>
               <button
                 onClick={() => {
                   setEditingItem(null);
                   setIsAddingNew(false);
                 }}
-                className="p-2 rounded-full text-[var(--text-muted)] hover:text-white"
+                className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveForm} className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Item Name (EN) *
+            <form onSubmit={handleSaveForm} className="flex flex-col gap-5">
+              {/* Row 1: English Name & Price */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                    Product Name (English) *
                   </label>
                   <input
                     type="text"
@@ -628,12 +709,13 @@ export default function AdminPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+                    placeholder="e.g. Double Chicken Shawarma"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
                     Price (ETB) *
                   </label>
                   <input
@@ -646,15 +728,16 @@ export default function AdminPage() {
                         price: Number(e.target.value),
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500 font-bold text-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-amber-400 font-black text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all"
                   />
                 </div>
               </div>
 
+              {/* Row 2: Category & Availability */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Category
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                    Category *
                   </label>
                   <select
                     value={formData.category || "chicken"}
@@ -664,7 +747,7 @@ export default function AdminPage() {
                         category: e.target.value as MenuCategoryId,
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all cursor-pointer"
                   >
                     {CATEGORIES.map((cat) => (
                       <option key={cat.id} value={cat.id}>
@@ -674,110 +757,133 @@ export default function AdminPage() {
                   </select>
                 </div>
 
-                <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Image (Upload or Server Link)
-                  </label>
-
-                  <div className="space-y-2">
-                    {/* Image Preview & Delete Button */}
-                    {formData.image && (
-                      <div className="flex items-center gap-3 p-2 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)]">
-                        <div className="w-12 h-12 rounded-lg bg-neutral-900 overflow-hidden relative shrink-0 border border-white/10">
-                          <Image
-                            src={formData.image}
-                            alt="Preview"
-                            fill
-                            unoptimized={Boolean(formData.image.startsWith("data:"))}
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs font-mono text-[var(--text-main)] truncate">
-                            {formData.image}
-                          </p>
-                          <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-1 mt-0.5">
-                            <CheckCircle2 className="w-3 h-3" /> Image attached
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={handleDeleteImage}
-                          className="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
-                          title="Delete image"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>Delete</span>
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Upload button directly to server */}
-                    <div className="flex items-center gap-2">
-                      <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-dashed border-[var(--brand-primary)] bg-[var(--brand-subtle-bg)] hover:opacity-90 text-[var(--brand-primary)] text-xs font-bold cursor-pointer transition-all">
-                        <Upload className="w-4 h-4" />
-                        <span>{isUploading ? "Uploading to server..." : "Upload Image to Server"}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileUpload}
-                          disabled={isUploading}
-                          className="hidden"
-                        />
-                      </label>
-                    </div>
-
-                    {uploadError && (
-                      <p className="text-xs text-red-500 font-semibold">{uploadError}</p>
-                    )}
-
-                    {/* Image URL text fallback */}
+                <div className="flex flex-col justify-end">
+                  <label className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer text-xs font-bold text-slate-300 hover:border-slate-700 transition-all">
                     <input
-                      type="text"
-                      value={formData.image || ""}
+                      type="checkbox"
+                      checked={formData.isAvailable !== false}
                       onChange={(e) =>
-                        setFormData({ ...formData, image: e.target.value })
+                        setFormData({
+                          ...formData,
+                          isAvailable: e.target.checked,
+                        })
                       }
-                      placeholder="/images/... or https://..."
-                      className="w-full px-3 py-2 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-xs font-mono focus:outline-none focus:border-amber-500"
+                      className="w-4 h-4 rounded text-orange-500 accent-orange-500 cursor-pointer"
                     />
-                  </div>
+                    <span>Item is currently In Stock & Active</span>
+                  </label>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Amharic Name (አማርኛ)
+              {/* Row 3: Product Image Upload & Link */}
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                  Product Image
+                </label>
+
+                {formData.image && (
+                  <div className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                    <div className="w-14 h-14 rounded-xl bg-slate-950 overflow-hidden relative shrink-0 border border-slate-700">
+                      <Image
+                        src={formData.image}
+                        alt="Preview"
+                        fill
+                        unoptimized={Boolean(formData.image.startsWith("data:"))}
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-mono text-slate-300 truncate">
+                        {formData.image}
+                      </p>
+                      <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
+                        <Check className="w-3.5 h-3.5" /> Image attached
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleDeleteImage}
+                      className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+                      title="Remove image"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove</span>
+                    </button>
+                  </div>
+                )}
+
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                  <label className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/15 text-orange-400 text-xs font-bold cursor-pointer transition-all">
+                    <Upload className="w-4 h-4" />
+                    <span>{isUploading ? "Optimizing & uploading..." : "Upload New Image from Device"}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      disabled={isUploading}
+                      className="hidden"
+                    />
                   </label>
+
+                  <input
+                    type="text"
+                    value={formData.image || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, image: e.target.value })
+                    }
+                    placeholder="Or enter path / URL (/images/...)"
+                    className="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+
+                {uploadError && (
+                  <p className="text-xs text-rose-400 font-semibold">{uploadError}</p>
+                )}
+              </div>
+
+              {/* Row 4: Multilingual Names (Amharic & Afaan Oromoo) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-3.5 rounded-2xl bg-slate-950/40 border border-slate-800 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                      Name in Amharic (አማርኛ)
+                    </label>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-400">AM</span>
+                  </div>
                   <input
                     type="text"
                     value={formData.nameAm || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, nameAm: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+                    placeholder="ለምሳሌ፡ ድርብ የዶሮ ሻዋርማ"
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500"
                   />
                 </div>
 
-                <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Afaan Oromoo Name
-                  </label>
+                <div className="p-3.5 rounded-2xl bg-slate-950/40 border border-slate-800 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                      Name in Afaan Oromoo
+                    </label>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-400">OM</span>
+                  </div>
                   <input
                     type="text"
                     value={formData.nameOm || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, nameOm: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+                    placeholder="fakkeenyaaf: Shawaarmaa Lukkuu Dachaa"
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500"
                   />
                 </div>
               </div>
 
+              {/* Row 5: English Description */}
               <div>
-                <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                  Description (EN)
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                  Description (English)
                 </label>
                 <textarea
                   rows={2}
@@ -785,14 +891,16 @@ export default function AdminPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full px-3.5 py-2 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+                  placeholder="Freshly grilled chicken wrapped in warm flatbread..."
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-none"
                 />
               </div>
 
+              {/* Row 6: Multilingual Descriptions */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Amharic Description
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                    Description (አማርኛ)
                   </label>
                   <textarea
                     rows={2}
@@ -803,13 +911,14 @@ export default function AdminPage() {
                         descriptionAm: e.target.value,
                       })
                     }
-                    className="w-full px-3.5 py-2 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+                    placeholder="በትኩስ ዳቦ የተጠቀለለ..."
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-[var(--text-subtle)] uppercase block mb-1">
-                    Oromo Description
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                    Description (Afaan Oromoo)
                   </label>
                   <textarea
                     rows={2}
@@ -820,45 +929,30 @@ export default function AdminPage() {
                         descriptionOm: e.target.value,
                       })
                     }
-                    className="w-full px-3.5 py-2 rounded-xl bg-[var(--bg-muted)] border border-[var(--border-main)] text-sm focus:outline-none focus:border-amber-500"
+                    placeholder="Daabboo haaraadhaan maramee..."
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-none"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 pt-2">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold">
-                  <input
-                    type="checkbox"
-                    checked={formData.isAvailable !== false}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        isAvailable: e.target.checked,
-                      })
-                    }
-                    className="w-4 h-4 rounded text-orange-500"
-                  />
-                  Item is currently in stock & available
-                </label>
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--border-subtle)]">
+              {/* Modal Actions */}
+              <div className="flex items-center justify-end gap-3 pt-5 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => {
                     setEditingItem(null);
                     setIsAddingNew(false);
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-[var(--bg-muted)] text-[var(--text-muted)] text-sm font-semibold hover:text-white"
+                  className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-sm font-semibold border border-slate-700 transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white text-sm font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white text-sm font-bold shadow-lg shadow-orange-500/25 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Save className="w-4 h-4" />
-                  Save Product
+                  <span>Save Product</span>
                 </button>
               </div>
             </form>
