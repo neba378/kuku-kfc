@@ -92,38 +92,42 @@ export const QrModal: React.FC<QrModalProps> = ({
         </p>
 
         {/* QR Display Frame */}
-        <div className="p-3 bg-white rounded-2xl shadow-inner border-4 border-amber-500/20 mb-6">
-          {qrDataUrl && (
-            <img
-              src={qrDataUrl}
-              alt="Kuku Menu QR Code"
-              className="w-56 h-56 rounded-lg"
-            />
-          )}
+        <div className="p-3 bg-white rounded-3xl shadow-xl border-4 border-amber-500/20 mb-6 relative group">
+          <img
+            src="/images/qr/kuku-qr-kfc-style.png"
+            alt="Kuku Menu Branded QR Code"
+            className="w-60 h-60 rounded-2xl object-contain"
+          />
+          <div className="mt-2 text-center">
+            <span className="text-[11px] font-bold text-[var(--brand-primary)] bg-orange-50 border border-orange-200 px-2.5 py-0.5 rounded-full">
+              kuku-kfc.vercel.app
+            </span>
+          </div>
         </div>
 
         {/* Action Buttons */}
         <div className="w-full grid grid-cols-2 gap-3">
-          <button
-            onClick={handleDownloadQr}
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-xs bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md hover:brightness-110 active:scale-95 transition-all"
+          <a
+            href="/images/qr/kuku-qr-kfc-style.png"
+            download="kuku-fried-chicken-qr.png"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs bg-gradient-to-r from-[var(--brand-primary)] to-amber-600 text-white shadow-md shadow-orange-500/20 hover:brightness-105 active:scale-95 transition-all text-center"
           >
             <Download className="w-4 h-4" />
-            Download
-          </button>
+            Download QR
+          </a>
 
           <button
             onClick={handleCopyLink}
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-xs bg-[var(--bg-muted)] text-[var(--text-main)] border border-[var(--border-main)] hover:border-orange-500/40 active:scale-95 transition-all"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs bg-[var(--bg-surface-subtle)] text-[var(--text-main)] border border-[var(--border-main)] hover:border-[var(--brand-primary)]/40 active:scale-95 transition-all cursor-pointer"
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-emerald-400" />
+                <Check className="w-4 h-4 text-emerald-600" />
                 Copied!
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 text-orange-400" />
+                <Copy className="w-4 h-4 text-[var(--brand-primary)]" />
                 Copy Link
               </>
             )}
