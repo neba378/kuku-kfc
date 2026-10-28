@@ -92,10 +92,10 @@ export const QrModal: React.FC<QrModalProps> = ({
         </p>
 
         {/* QR Display Frame */}
-        <div className="p-3 bg-white rounded-3xl shadow-xl border-4 border-amber-500/20 mb-6 relative group">
+        <div className="p-3 bg-white rounded-3xl shadow-xl border-4 border-amber-500/20 mb-4 relative group">
           <img
-            src="/images/qr/kuku-qr-kfc-style.png"
-            alt="Kuku Menu Branded QR Code"
+            src="/images/qr/kuku-qr-clean-logo.png"
+            alt="KUKU Fried Chicken Official QR Code"
             className="w-60 h-60 rounded-2xl object-contain"
           />
           <div className="mt-2 text-center">
@@ -106,11 +106,11 @@ export const QrModal: React.FC<QrModalProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="w-full grid grid-cols-2 gap-3">
+        <div className="w-full grid grid-cols-2 gap-2.5 mb-2.5">
           <a
-            href="/images/qr/kuku-qr-kfc-style.png"
-            download="kuku-fried-chicken-qr.png"
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs bg-gradient-to-r from-[var(--brand-primary)] to-amber-600 text-white shadow-md shadow-orange-500/20 hover:brightness-105 active:scale-95 transition-all text-center"
+            href="/images/qr/kuku-qr-clean-logo.png"
+            download="kuku-menu-qr-code.png"
+            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs bg-gradient-to-r from-[var(--brand-primary)] to-amber-600 text-white shadow-md shadow-orange-500/20 hover:brightness-105 active:scale-95 transition-all text-center"
           >
             <Download className="w-4 h-4" />
             Download QR
@@ -118,7 +118,7 @@ export const QrModal: React.FC<QrModalProps> = ({
 
           <button
             onClick={handleCopyLink}
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs bg-[var(--bg-surface-subtle)] text-[var(--text-main)] border border-[var(--border-main)] hover:border-[var(--brand-primary)]/40 active:scale-95 transition-all cursor-pointer"
+            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs bg-[var(--bg-surface-subtle)] text-[var(--text-main)] border border-[var(--border-main)] hover:border-[var(--brand-primary)]/40 active:scale-95 transition-all cursor-pointer"
           >
             {copied ? (
               <>
@@ -133,6 +133,16 @@ export const QrModal: React.FC<QrModalProps> = ({
             )}
           </button>
         </div>
+
+        {/* Download Table Stand Poster Link */}
+        <a
+          href="/images/qr/kuku-poster-clean-qr.jpg"
+          download="kuku-restaurant-table-poster.jpg"
+          className="w-full py-2 px-3 rounded-xl bg-[var(--brand-subtle-bg)] text-[var(--brand-primary)] border border-[var(--brand-subtle-border)] hover:bg-orange-100 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+        >
+          <Download className="w-3.5 h-3.5" />
+          <span>Download Print Table Stand Poster (A4/A5)</span>
+        </a>
       </div>
     </div>
   );
