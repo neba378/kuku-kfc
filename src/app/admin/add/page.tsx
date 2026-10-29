@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   MenuItem,
   CATEGORIES,
+  CategoryInfo,
   INITIAL_MENU_ITEMS,
   MenuCategoryId,
 } from "@/data/menu";
@@ -94,6 +95,7 @@ function AddProductForm() {
   const [pinError, setPinError] = useState<string>("");
 
   const [items, setItems] = useState<MenuItem[]>([]);
+  const [categories, setCategories] = useState<CategoryInfo[]>(CATEGORIES);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
@@ -142,6 +144,27 @@ function AddProductForm() {
           setFormData({ ...found });
         }
       }
+
+      // Load dynamic categories
+      const loadCategories = () => {
+        const storedCats = localStorage.getItem("kuku_categories");
+        if (storedCats) {
+          try {
+            const parsed = JSON.parse(storedCats);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setCategories(parsed);
+              return;
+            }
+          } catch {
+            // ignore
+          }
+        }
+        setCategories(CATEGORIES);
+      };
+
+      loadCategories();
+      window.addEventListener("kuku_categories_updated", loadCategories);
+      return () => window.removeEventListener("kuku_categories_updated", loadCategories);
     }
   }, [editId]);
 
@@ -429,17 +452,25 @@ function AddProductForm() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1.5">
-                    Category *
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block">
+                      Category *
+                    </label>
+                    <Link
+                      href="/admin?tab=categories&action=new"
+                      className="text-[11px] font-semibold text-[var(--brand-primary)] hover:underline flex items-center gap-1"
+                    >
+                      + Add New Category
+                    </Link>
+                  </div>
                   <select
-                    value={formData.category || "chicken"}
+                    value={formData.category || (categories[0]?.id || "chicken")}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value as MenuCategoryId })}
                     className="w-full px-4 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-main)] text-[var(--text-main)] text-sm focus:outline-none focus:border-[var(--brand-primary)] focus:ring-2 focus:ring-[var(--brand-primary)]/15 transition-all cursor-pointer shadow-2xs"
                   >
-                    {CATEGORIES.map((cat) => (
+                    {categories.map((cat) => (
                       <option key={cat.id} value={cat.id}>
-                        {cat.name}
+                        {cat.name} ({cat.nameAm || cat.id})
                       </option>
                     ))}
                   </select>

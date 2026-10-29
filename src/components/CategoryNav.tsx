@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { CATEGORIES, CategoryInfo, MenuCategoryId, Language } from "@/data/menu";
 import { Utensils, ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,14 +10,46 @@ interface CategoryNavProps {
   activeCategory: MenuCategoryId;
   onSelectCategory: (id: MenuCategoryId) => void;
   currentLanguage: Language;
+  categories?: CategoryInfo[];
 }
 
 export const CategoryNav: React.FC<CategoryNavProps> = ({
   activeCategory,
   onSelectCategory,
   currentLanguage,
+  categories,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [internalCategories, setInternalCategories] = useState<CategoryInfo[]>(categories || CATEGORIES);
+
+  useEffect(() => {
+    if (categories) {
+      setInternalCategories(categories);
+      return;
+    }
+    const loadStored = () => {
+      if (typeof window === "undefined") return;
+      const stored = localStorage.getItem("kuku_categories");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setInternalCategories(parsed);
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
+      setInternalCategories(CATEGORIES);
+    };
+
+    loadStored();
+    window.addEventListener("kuku_categories_updated", loadStored);
+    return () => window.removeEventListener("kuku_categories_updated", loadStored);
+  }, [categories]);
+
+  const displayCategories = categories || internalCategories;
 
   const getCategoryName = (cat: CategoryInfo) => {
     if (currentLanguage === "am") return cat.nameAm;
@@ -98,7 +130,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
           </button>
 
           {/* Individual Category Avatars with Circular Food Photos */}
-          {CATEGORIES.map((cat) => {
+          {displayCategories.map((cat) => {
             const isActive = activeCategory === cat.id;
             const displayName = getCategoryName(cat);
 
@@ -124,9 +156,10 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
                   }`}
                 >
                   <Image
-                    src={cat.image}
+                    src={cat.image || "/images/real/real-crispy-chicken.jpg"}
                     alt={displayName}
                     fill
+                    unoptimized
                     sizes="60px"
                     className="object-cover"
                   />

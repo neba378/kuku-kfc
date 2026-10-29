@@ -1,15 +1,6 @@
 export type Language = "en" | "am" | "om";
 
-export type MenuCategoryId =
-  | "all"
-  | "shawarma"
-  | "roasted-chicken"
-  | "chicken"
-  | "burger"
-  | "fish"
-  | "pizza"
-  | "drinks"
-  | "extra";
+export type MenuCategoryId = string;
 
 export interface CategoryInfo {
   id: MenuCategoryId;

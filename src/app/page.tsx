@@ -5,6 +5,7 @@ import Image from "next/image";
 import {
   MenuItem,
   CATEGORIES,
+  CategoryInfo,
   INITIAL_MENU_ITEMS,
   MenuCategoryId,
   Language,
@@ -28,6 +29,7 @@ import { Flame } from "lucide-react";
 export default function HomePage() {
   const [currentLanguage, setCurrentLanguage] = useState<Language>("en");
   const [activeCategory, setActiveCategory] = useState<MenuCategoryId>("all");
+  const [categories, setCategories] = useState<CategoryInfo[]>(CATEGORIES);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [items, setItems] = useState<MenuItem[]>(INITIAL_MENU_ITEMS);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
@@ -82,6 +84,26 @@ export default function HomePage() {
           // ignore
         }
       }
+
+      // Sync categories from localStorage
+      const syncCategories = () => {
+        const storedCats = localStorage.getItem("kuku_categories");
+        if (storedCats) {
+          try {
+            const parsed = JSON.parse(storedCats);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setCategories(parsed);
+              return;
+            }
+          } catch {
+            // ignore
+          }
+        }
+        setCategories(CATEGORIES);
+      };
+      syncCategories();
+      window.addEventListener("kuku_categories_updated", syncCategories);
+      return () => window.removeEventListener("kuku_categories_updated", syncCategories);
     }
   }, []);
 
@@ -289,6 +311,7 @@ export default function HomePage() {
           setActiveCategory(catId);
         }}
         currentLanguage={currentLanguage}
+        categories={categories}
       />
 
       {/* Integrated Search and Price Filter Bar (Below banner & categories) */}
@@ -381,7 +404,7 @@ export default function HomePage() {
         ) : activeCategory === "all" && !searchQuery && !activeTagFilter && priceFilter === "all" ? (
           /* Grouped by original Menu Categories - 2 cards per row on mobile! */
           <div className="flex flex-col gap-8 sm:gap-10">
-            {CATEGORIES.map((cat) => {
+            {categories.map((cat) => {
               const catItems = processedItems.filter(
                 (item) => item.category === cat.id
               );
